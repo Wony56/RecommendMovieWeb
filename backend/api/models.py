@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 
 class Profile(models.Model):
@@ -7,6 +8,8 @@ class Profile(models.Model):
     gender = models.CharField(max_length=10, default='M')
     age = models.IntegerField(default=25)
     occupation = models.CharField(max_length=200)
+    is_subscribe = models.BooleanField(default=False)
+    subscribe_expire = models.DateTimeField(default=datetime.now())
 
 #  wrapper for create user Profile
 def create_profile(**kwargs):
@@ -21,7 +24,9 @@ def create_profile(**kwargs):
         user=user,
         gender=kwargs['gender'],
         age=kwargs['age'],
-        occupation=kwargs['occupation']
+        occupation=kwargs['occupation'],
+        is_subscribe=kwargs['is_subscribe'],
+        subscribe_expire=kwargs['subscribe_expire']
     )
 
     return profile

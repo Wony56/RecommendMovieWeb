@@ -17,8 +17,7 @@ urlpatterns = [
     url('users/all/$', user_views.all_profiles, name='all_profiles'),
     url('users/delete/$', user_views.delete_user, name='delete_user'),
     url('auth/signup/$',auth_views.signup,name='signup'),
-    url('auth/login/$',auth_views.authenticate_user,name='login'),
-    url('auth/login/on/$', auth_views.on_auth_user, name='on_auth_user'),
+    url('auth/login/$',auth_views.login,name='login'),
 
     url('auth/api-token-auth/', obtain_jwt_token),
     url('auth/api-token-refresh/', refresh_jwt_token),
