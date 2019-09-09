@@ -127,3 +127,20 @@ def login(request):
                 serializer = ProfileSerializer(profile)
 
                 return Response(data=serializer.data, status=status.HTTP_200_OK)
+
+@api_view(['GET'])
+def on_auth_state(request):
+    if request.method == 'GET':
+        user_by_cookie = request.COOKIES.get('user')
+        user_by_session = request.session['user']
+
+        if user_by_cookie or user_by_session:
+            if user_by_cookie == user_by_session:
+                profile = Profile.objects.get(user=user)
+                serializer = ProfileSerializer(profile)
+
+                return Response(data=serializer.data, status=status.HTTP_200_OK)
+            else:
+                return Response(status=status.HTTP_200_OK)
+        
+        return Response(status=status.HTTP_200_OK)
