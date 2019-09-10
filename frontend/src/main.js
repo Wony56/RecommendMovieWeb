@@ -7,22 +7,19 @@ import store from './store'
 import api from './api'
 import carousel from 'vue-owl-carousel'
 import VueParticles from 'vue-particles'
+import VueCookies from 'vue-cookies'
+
+Vue.use(VueCookies)
 Vue.use(VueParticles)
-const TOKEN = 'hojin_token';
 
 Vue.config.productionTip = false
 
-Vue.use(VueCookie)
-
-const tokenFromCookie = document.cookie.match('(^|;) ?' + TOKEN + '=([^;]*)(;|$)');
-
-const token = tokenFromCookie ? tokenFromCookie[2] : '';
-
-api.onAuthUser(token).then(res => {
-    if (res.status === 200) {
-        if (res.data) {
+api.onAuthUser().then(res => {
+    if(res.status === 200){
+        if(res.data){
             store.state.auth.userInfo = res.data;
-        } else {
+            VueCookies.set('user', res.data.username, "30min");
+        }else{
             store.state.auth.userInfo = null;
         }
 
@@ -34,6 +31,6 @@ api.onAuthUser(token).then(res => {
             render: h => h(App)
         }).$mount('#app')
     }
-}).catch(err => {
+}).catch(err=>{
     alert(err);
 })

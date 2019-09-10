@@ -6,6 +6,8 @@ import MovieDetailPage from '../components/pages/MovieDetailPage'
 import UserDetailPage from '../components/pages/UserDetailPage'
 import AdminPage from '../components/pages/AdminPage'
 
+import EntrancePage from '../components/demo_auth/EntrancePage'
+
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -18,6 +20,8 @@ const router = new VueRouter({
         { path: '/movies/detail', component: MovieDetailPage, name: 'movie-detail' },
         { path: '/user/detail/:id', component: UserDetailPage, name: 'user-detail' },
         { path: '/admin', component: AdminPage, name: 'admin', meta: { requiresAuth: true } },
+
+        { path: '/entrance', component: EntrancePage, name: 'entrance'}
     ],
     scrollBehavior() {
         return { x: 0, y: 0 }
