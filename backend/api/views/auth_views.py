@@ -15,7 +15,7 @@ def signup(request):
         profile = request.data.get('params', None)
 
         print(profile)
-
+        
         username = profile.get('username', None)
         password = profile.get('password', None)
         age = profile.get('age', None)
@@ -106,7 +106,7 @@ def get_profile(request) :
 def login(request):
 
     if request.method == 'POST':
-        request_data = request.data.get('auth_info', None)
+        request_data = request.data.get('params', None)
 
         if request_data:
             try:
@@ -136,6 +136,7 @@ def on_auth_state(request):
 
         if user_by_cookie and user_by_session:
             if user_by_cookie == user_by_session:
+                user = User.objects.get(username=user_by_session)
                 profile = Profile.objects.get(user=user)
                 serializer = ProfileSerializer(profile)
 
@@ -154,7 +155,7 @@ def logout(request):
 
         if user_by_cookie and user_by_session:
             if user_by_cookie == user_by_session:
-                del user_by_session
+                del request.session['user']
             else:
                 return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
