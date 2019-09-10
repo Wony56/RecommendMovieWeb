@@ -83,13 +83,6 @@ REST_FRAMEWORK = {
     )
 }
 
-JWT_AUTH = {
-    'JWT_VERIFY': True,
-    'JWT_VERIFY_EXPIRATION': True,
-    'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=30),
-    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
-}
-
 # Database
 # https://docs.djangoproject.com/en/2.2/ref/settings/#databases
 

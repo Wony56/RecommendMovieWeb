@@ -134,7 +134,7 @@ def on_auth_state(request):
         user_by_cookie = request.COOKIES.get('user')
         user_by_session = request.session['user']
 
-        if user_by_cookie or user_by_session:
+        if user_by_cookie and user_by_session:
             if user_by_cookie == user_by_session:
                 profile = Profile.objects.get(user=user)
                 serializer = ProfileSerializer(profile)
@@ -143,4 +143,21 @@ def on_auth_state(request):
             else:
                 return Response(status=status.HTTP_200_OK)
         
+        return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def logout(request):
+    if request.method == 'GET':
+        user_by_cookie = request.COOKIES.get('user')
+        user_by_session = request.session['user']
+
+        if user_by_cookie and user_by_session:
+            if user_by_cookie == user_by_session:
+                del user_by_session
+            else:
+                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        else:
+            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
         return Response(status=status.HTTP_200_OK)
