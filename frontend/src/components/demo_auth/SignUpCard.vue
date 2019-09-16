@@ -200,10 +200,10 @@ export default {
   },
   methods: {
     next() {
-      if (step === 1) {
+      if (this.step === 1) {
         //사용자 중복 체크
       } else {
-        step++;
+        this.step++;
       }
     },
     signup() {

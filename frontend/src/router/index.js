@@ -15,12 +15,12 @@ Vue.use(VueRouter)
 const router = new VueRouter({
     mode: 'history',
     routes: [
-        { path: '/', component: EmptyPage, name: 'home' },
-        { path: '/movies/search', component: MovieSearchPage, name: 'movie-search' },
-        { path: '/movies/detail', component: MovieDetailPage, name: 'movie-detail' },
-        { path: '/user/detail/:id', component: UserDetailPage, name: 'user-detail' },
+        { path: '*', redirect: '/'},
+        { path: '/', component: EmptyPage, name: 'home', meta: {requiresLogin: true} },
+        { path: '/movies/search', component: MovieSearchPage, name: 'movie-search', meta: {requiresLogin: true} },
+        { path: '/movies/detail', component: MovieDetailPage, name: 'movie-detail', meta: {requiresLogin: true} },
+        { path: '/user/detail/:id', component: UserDetailPage, name: 'user-detail', meta: {requiresLogin: true} },
         { path: '/admin', component: AdminPage, name: 'admin', meta: { requiresAuth: true } },
-
         { path: '/entrance', component: EntrancePage, name: 'entrance'}
     ],
     scrollBehavior() {
@@ -29,7 +29,13 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-    if (to.matched.some(record => record.meta.requiresAuth)) {
+    if(to.matched.some(record => record.meta.requiresLogin)){
+        if(!store.getters.loggedIn){
+            next('/entrance');
+        }else{
+            next();
+        }
+    }else if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.getters.loggedIn || !store.state.auth.userInfo.is_staff) {
             alert("관리자권한이 없습니다...")
             next('/');

@@ -132,7 +132,7 @@ def login(request):
 def on_auth_state(request):
     if request.method == 'GET':
         user_by_cookie = request.COOKIES.get('user')
-        user_by_session = request.session['user']
+        user_by_session = request.session.get('user', None)
 
         if user_by_cookie and user_by_session:
             if user_by_cookie == user_by_session:
@@ -151,7 +151,7 @@ def on_auth_state(request):
 def logout(request):
     if request.method == 'GET':
         user_by_cookie = request.COOKIES.get('user')
-        user_by_session = request.session['user']
+        user_by_session = request.session.get('user', None)
 
         if user_by_cookie and user_by_session:
             if user_by_cookie == user_by_session:
