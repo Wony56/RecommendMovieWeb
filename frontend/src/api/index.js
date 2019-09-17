@@ -48,6 +48,11 @@ export default {
     return axios.get(`${apiUrl}/cluster/getClusterMovie/`, {
       params
     })
+  },
+  checkDuplicate(params){
+    return axios.post(`${apiUrl}/auth/duplicate/`, {
+      params
+    })
   }
 
 }
