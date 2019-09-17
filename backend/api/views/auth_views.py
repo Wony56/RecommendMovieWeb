@@ -162,3 +162,25 @@ def logout(request):
             return Response(status=status.HTTP_400_BAD_REQUEST)
 
         return Response(status=status.HTTP_200_OK)
+
+@api_view(['POST'])
+def user_duplicate(request):
+    if request.method == 'POST':
+        request_data = request.data.get('params', None)
+        print(request_data)
+
+        try:
+            username = request_data.get('username', None)
+
+            if username:
+                user = User.objects.get(username=username)
+
+                if user:
+                    err = "이미 존재하는 USERNAME입니다."
+                    return Response(data=err, status=status.HTTP_400_BAD_REQUEST)
+            else:
+                return Response(status=status.HTTP_500_BAD_REQUEST)
+        except User.DoesNotExist:
+            return Response(status=status.HTTP_200_OK)
+
+        

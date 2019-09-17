@@ -11,7 +11,7 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="10">
-                  <v-form ref="username-form" v-model="usernameValid">
+                  <v-form ref="usernameForm" v-model="usernameValid">
                     <v-text-field v-model="username" :rules="nameRules" label="Username"></v-text-field>
                     <span
                       class="caption grey--text text--darken-1"
@@ -28,21 +28,23 @@
             <v-container>
               <v-row justify="center">
                 <v-col cols="10">
-                  <v-text-field
-                    v-model="password"
-                    :rules="passwordRules"
-                    label="Password"
-                    type="password"
-                  ></v-text-field>
-                  <v-text-field
-                    v-model="re_password"
-                    :rules="rePasswordRules"
-                    label="Confirm Password"
-                    type="password"
-                  ></v-text-field>
-                  <span
-                    class="caption grey--text text--darken-1"
-                  >Please enter a password for your account</span>
+                  <v-form ref="pwdForm" v-model="passwordValid">
+                    <v-text-field
+                      v-model="password"
+                      :rules="passwordRules"
+                      label="Password"
+                      type="password"
+                    ></v-text-field>
+                    <v-text-field
+                      v-model="re_password"
+                      :rules="rePasswordRules"
+                      label="Confirm Password"
+                      type="password"
+                    ></v-text-field>
+                    <span
+                      class="caption grey--text text--darken-1"
+                    >Please enter a password for your account</span>
+                  </v-form>
                 </v-col>
               </v-row>
             </v-container>
@@ -52,28 +54,30 @@
         <v-window-item :value="3">
           <v-card-text>
             <v-container>
-              <v-row justify="center">
-                <v-col cols="12" sm="6">
-                  <div>Gender</div>
-                  <v-col cols="12">
-                    <v-radio-group v-model="gender" row>
-                      <v-radio label="Man" value="M"></v-radio>
-                      <v-radio label="Woman" value="W"></v-radio>
-                    </v-radio-group>
+              <v-form ref="infoForm" v-model="ageValid">
+                <v-row justify="center">
+                  <v-col cols="12" sm="6">
+                    <div>Gender</div>
+                    <v-col cols="12">
+                      <v-radio-group v-model="gender" row>
+                        <v-radio label="Man" value="M"></v-radio>
+                        <v-radio label="Woman" value="W"></v-radio>
+                      </v-radio-group>
+                    </v-col>
+                    <div>Age</div>
+                    <v-col cols="5">
+                      <v-text-field
+                        class="age-input"
+                        v-model="age"
+                        placeholder="ex) 20"
+                        type="number"
+                        :rules="ageRules"
+                        suffix="세"
+                      ></v-text-field>
+                    </v-col>
                   </v-col>
-                  <div>Age</div>
-                  <v-col cols="5">
-                    <v-text-field
-                      class="age-input"
-                      v-model="age"
-                      placeholder="ex) 20"
-                      type="number"
-                      :rules="ageRules"
-                      suffix="세"
-                    ></v-text-field>
-                  </v-col>
-                </v-col>
-              </v-row>
+                </v-row>
+              </v-form>
             </v-container>
           </v-card-text>
         </v-window-item>
@@ -115,13 +119,7 @@
       <v-card-actions>
         <v-btn :disabled="step === 1" text @click="step--">Back</v-btn>
         <div class="flex-grow-1"></div>
-        <v-btn
-          :disabled="step === 5"
-          v-if="step !== 5"
-          color="primary"
-          depressed
-          @click="step++"
-        >Next</v-btn>
+        <v-btn :disabled="step === 5" v-if="step !== 5" color="primary" depressed @click="next">Next</v-btn>
       </v-card-actions>
     </v-card>
   </div>
@@ -133,8 +131,8 @@ import api from "../../api";
 export default {
   data() {
     return {
-      usernameValid: false,
-      passwordValid: false,
+      usernameValid: true,
+      passwordValid: true,
       ageValid: false,
       step: 1,
       username: "",
@@ -202,6 +200,32 @@ export default {
     next() {
       if (this.step === 1) {
         //사용자 중복 체크
+        if (this.$refs.usernameForm.validate()) {
+          const params = {
+            username: this.username
+          };
+          api
+            .checkDuplicate(params)
+            .then(res => {
+              if (res.status === 200) {
+                this.step++;
+              }
+            })
+            .catch(err => {
+              if (err.response.status === 400) {
+                const message = err.response.data;
+                alert(message);
+              }
+            });
+        }
+      } else if (this.step === 2) {
+        if (this.$refs.pwdForm.validate()) {
+          this.step++;
+        }
+      } else if (this.step === 3) {
+        if (this.$refs.infoForm.validate()) {
+          this.step++;
+        }
       } else {
         this.step++;
       }
@@ -221,7 +245,25 @@ export default {
         .then(res => {
           if (res.status === 201) {
             alert("회원이 되신 것을 축하드립니다.");
-            this.$router.push("/");
+
+            const user = {
+              username: this.username,
+              password: this.password
+            };
+
+            api
+              .login(user)
+              .then(res => {
+                if (res.status === 200) {
+                  this.$store.state.auth.userInfo = res.data;
+                  this.$cookies.set("user", res.data.username, "30min");
+
+                  this.$router.push("/");
+                }
+              })
+              .catch(err => {
+                alert(err);
+              });
           }
         })
         .catch(err => {

@@ -52,7 +52,7 @@ export default {
               this.$store.state.auth.userInfo = res.data;
               this.$cookies.set("user", res.data.username, "30min");
 
-              this.$router.replace("/");
+              this.$router.push("/");
             }
           })
           .catch(err => {
