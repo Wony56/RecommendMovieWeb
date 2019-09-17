@@ -116,11 +116,11 @@ def login(request):
                 user = User.objects.get(username=username)
             except User.DoesNotExist:
                 err = "아이디 또는 비밀번호가 틀렸습니다."
-                return Response(data=err, status=status.HTTP_200_OK)
+                return Response(data=err, status=status.HTTP_401_UNAUTHORIZED)
             
             if not check_password(password, user.password):
                 err = "아이디 또는 비밀번호가 틀렸습니다."
-                return Response(data=err, status=status.HTTP_200_OK)
+                return Response(data=err, status=status.HTTP_401_UNAUTHORIZED)
             else:
                 request.session['user'] = user.username
                 profile = Profile.objects.get(user=user)
@@ -157,8 +157,8 @@ def logout(request):
             if user_by_cookie == user_by_session:
                 del request.session['user']
             else:
-                return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+                return Response(status=status.HTTP_400_BAD_REQUEST)
         else:
-            return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
         return Response(status=status.HTTP_200_OK)

@@ -8,9 +8,11 @@ import api from './api'
 import carousel from 'vue-owl-carousel'
 import VueParticles from 'vue-particles'
 import VueCookies from 'vue-cookies'
+import Vuelidate from 'vuelidate'
 
 Vue.use(VueCookies)
 Vue.use(VueParticles)
+Vue.use(Vuelidate)
 
 Vue.config.productionTip = false
 
