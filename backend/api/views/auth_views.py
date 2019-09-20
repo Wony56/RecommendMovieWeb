@@ -85,7 +85,7 @@ def signup_many(request):
             create_profile(username=username, password=password, age=age,
                             occupation=occupation, gender=gender, is_subscribe=is_subscribe, subscribe_expire=subscribe_expire)
                 
-            return Response(status=status.HTTP_201_CREATED)
+        return Response(status=status.HTTP_201_CREATED)
 
 @api_view(['GET'])
 def get_profile(request) :

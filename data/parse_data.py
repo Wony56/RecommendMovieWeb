@@ -27,10 +27,11 @@ def create_users():
             'password': username,
             'age': age,
             'gender': gender,
+            'is_subscribe': False,
             'occupation': occupation
         })
-        if i == 50 :
-            break
+        # if i == 50 :
+        #     break
     response = requests.post(API_URL + 'auth/signup-many/', data=json.dumps(request_data), headers=headers)
     print(response.text)
 
