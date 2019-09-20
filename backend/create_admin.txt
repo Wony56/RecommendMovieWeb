@@ -4,4 +4,4 @@ user=User.objects.create_user('admin', password='admin', is_active=True)
 user.is_superuser=True
 user.is_staff=True
 user.save()
-profile = Profile.objects.create(user=user, gender='M', age=20, occupation='admin')
+profile = Profile.objects.create(user=user, gender='M', age=20,is_subscribe=False, occupation='admin')
