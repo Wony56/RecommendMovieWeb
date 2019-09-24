@@ -28,55 +28,23 @@
       ></v-text-field>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndUp">
-      <template v-if="!loggedIn">
-        <v-btn
-          text
-          color="#ff2f6e"
-          style="margin-right:15px;"
-          @click.stop="$store.state.dialog.signinDialog = true"
-        >로그인</v-btn>
-        <v-btn
-          outlined
-          color="#ff2f6e"
-          style="margin-right:15px;"
-          @click.stop="signupdialog = true"
-        >회원가입</v-btn>
-      </template>
-      <template v-else>
+      <template v-if="loggedIn">
         <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="logout">로그아웃</v-btn>
       </template>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndDown">
-      <v-btn  v-if="!loggedIn" text color="#ff2f6e" fab @click.stop="$store.state.dialog.signinDialog = true">
-        <v-icon>mdi-login-variant</v-icon>
-      </v-btn>
-       <v-btn v-else text color="#ff2f6e" fab @click="logout"><v-icon>mdi-logout-variant</v-icon></v-btn>
-      <v-btn text color="#ff2f6e" fab @click.stop="signupdialog = true">
-        <v-icon>mdi-account-plus</v-icon>
-      </v-btn>
+       <v-btn v-if="loggedIn" text color="#ff2f6e" fab @click="logout"><v-icon>mdi-logout-variant</v-icon></v-btn>
     </v-layout>
-    <v-dialog v-model="signupdialog" max-width="400">
-      <SignUpPanel />
-    </v-dialog>
-    <v-dialog v-model="$store.state.dialog.signinDialog" max-width="400">
-      <SingInPanel />
-    </v-dialog>
   </v-app-bar>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import SignUpPanel from "../login/SignUpPanel.vue";
-import SingInPanel from "../login/SignInPanel.vue";
 export default {
   components: {
-    SignUpPanel,
-    SingInPanel
   },
   data() {
     return {
-      signindialog: false,
-      signupdialog: false,
       loading: false,
       items: [],
       search: null,

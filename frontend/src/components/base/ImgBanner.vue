@@ -160,7 +160,7 @@
     <!-- /.slider-page slider-page--right -->
   </article>
   <!-- /.js-scrolling__page js-scrolling__page-3 -->
-</vue-particles>
+
 </section>
 <!-- /.slider-pages -->
 
