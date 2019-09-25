@@ -56,6 +56,9 @@ export default {
     return axios.post(`${apiUrl}/auth/duplicate/`, {
       params
     })
+  },
+  subscribe(){
+    return axios.get(`${apiUrl}/auth/subscribe/`);
   }
 
 }
