@@ -41,6 +41,9 @@ export default {
       params
     })
   },
+  logout(){
+    return axios.get(`${apiUrl}/auth/logout/`)
+  },
   onAuthUser(){
     return axios.get(`${apiUrl}/auth/on/`);
   },

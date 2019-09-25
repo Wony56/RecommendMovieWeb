@@ -33,16 +33,19 @@
       </template>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndDown">
-       <v-btn v-if="loggedIn" text color="#ff2f6e" fab @click="logout"><v-icon>mdi-logout-variant</v-icon></v-btn>
+      <v-btn v-if="loggedIn" text color="#ff2f6e" fab @click="logout">
+        <v-icon>mdi-logout-variant</v-icon>
+      </v-btn>
     </v-layout>
   </v-app-bar>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
+import api from "../../../api";
+
 export default {
-  components: {
-  },
+  components: {},
   data() {
     return {
       loading: false,
@@ -64,9 +67,22 @@ export default {
       this.searchMovies(params);
     },
     logout() {
-      alert(this.$store.state.auth.userInfo.name + "님 로그아웃하셨습니다.");
-      this.$cookie.delete("hojin_token");
-      this.$store.state.auth.userInfo = null;
+      api
+        .logout()
+        .then(res => {
+          if (res.status === 200) {
+            alert(
+              this.$store.state.auth.userInfo.username +
+                "님 로그아웃하셨습니다."
+            );
+            this.$cookies.remove("user");
+            this.$store.state.auth.userInfo = null;
+            this.$router.push("/entrance");
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
     }
   }
 };
