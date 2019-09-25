@@ -4,6 +4,7 @@ from api.views import auth_views,cluster_views
 from rest_framework_jwt.views import obtain_jwt_token
 from rest_framework_jwt.views import refresh_jwt_token
 from rest_framework_jwt.views import verify_jwt_token
+from api.views import knn_views
 
 urlpatterns = [
     url('auth/signup-many/$', auth_views.signup_many, name='sign_up_many'),
@@ -29,4 +30,6 @@ urlpatterns = [
     url('cluster/clusterMovie/$',cluster_views.moviecluster_many,name='moviecluster_many'),
     url('cluster/getClusterMovie/$',cluster_views.get_moviegroup,name=' get_moviegroup'),
     url('cluster/getClusterUser/$',cluster_views.get_usergroup,name=' get_usergroup'),
+
+    url('recommend/knn_age_view/$',knn_views.reg_knn_age_view,name='reg_knn_age_view'),
 ]

@@ -95,4 +95,4 @@ if __name__ == '__main__':
             })
     print(request_data)
     # print(request_data)
-    response = requests.post(API_URL + 'recommend/knnViewCnt', data=json.dumps(request_data), headers=headers)
+    response = requests.post(API_URL + 'recommend/knn_age_view/', data=json.dumps(request_data), headers=headers)
