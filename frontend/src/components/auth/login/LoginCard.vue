@@ -3,7 +3,7 @@
         <v-col class="pa-0">
             <v-flex>
                 <v-card height="600" class="card_background_color">
-                    <v-form>
+                    <v-form ref="form">
                         <v-card-title class="paddingx70 padding_top70 font-weight-bold display-1" style="color:#fff">
                             로그인
                         </v-card-title>
@@ -11,12 +11,14 @@
                             height="60"
                             class="paddingx70 padding_top40 label_color rounded"
                             label="아이디"
+                            v-model="username"
                             background-color="rgba(128, 128, 128, 0.5)"
                             color="#fff"
                             required
                             dark
                         ></v-text-field>
                         <v-text-field
+                            v-model="password"
                             height="60"
                             dark
                             style="margin-top:-20px;"
@@ -32,6 +34,7 @@
                             style="background-color:#ff2f6e; color:#fff; font-size:17px;"
                             height="55"
                             block
+                            @click="onSubmit"
                             >
                                 로그인
                             </v-btn>
@@ -50,6 +53,9 @@
 </template>
 
 <script>
+
+import api from "../../../api"
+
 export default {
     props:{
         isLogin: {
@@ -57,7 +63,33 @@ export default {
             required: true
         }
     },
-    methods: {
+    data() {
+        return {
+            username: "",
+            password: ""
+        };
+    },
+    methods: 
+        {
+        onSubmit() {
+        const params = {
+            username: this.username.trim(),
+            password: this.password.trim()
+        };
+
+        api
+            .login(params)
+            .then(res => {
+            if (res.status === 200) {
+                console.log(JSON.stringify(res.data));
+                this.$cookie.set("hojin_token", res.data.token, { expires: "30m" });
+                this.$router.push("/");
+            }
+            })
+            .catch(err => {
+            alert(err);
+            });
+        },   
         createAccount() {
             this.$emit('update:isLogin', false)
         }
