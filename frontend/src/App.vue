@@ -1,10 +1,10 @@
 <template>
   <v-app>
-    <Header/>
+    <Header v-if="loggedIn"/>
     <v-content style="background-color:#fff">
       <router-view />
     </v-content>
-    <Footer/>
+    <Footer v-if="loggedIn"/>
   </v-app>
 </template>
 
