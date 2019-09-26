@@ -27,6 +27,8 @@ def signup(request):
         if is_subscribe:
             if is_subscribe == True:
                 subscribe_expire += timedelta(days=3)
+        else:
+            is_subscribe = False
                 
         if age < 18:
             age ="1"
