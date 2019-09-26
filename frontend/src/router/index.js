@@ -31,13 +31,12 @@ const router = new VueRouter({
 
 router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresLogin)) {
-        if (!store.getters.loggedIn) {
-            next('/entrance');
-        } else{
-            next();
-        }
-    }else if (!to.matched.some(record => record.meta.requiresLogin) && store.getters.loggedIn) {
-        next('/');
+        // if (!store.getters.loggedIn) {
+        //     next('/entrance');
+        // } else {
+        //     next();
+        // }
+        next();
     } else if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.getters.loggedIn || !store.state.auth.userInfo.is_staff) {
             alert("관리자권한이 없습니다...")

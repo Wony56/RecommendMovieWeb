@@ -18,14 +18,13 @@ const actions = {
       title: d.title,
       genres: d.genres_array,
       viewCnt: d.view_cnt,
-      rating: d.average_rating,
-      mcount : d.mcount,
+      rating: d.rrating,
+      mcount : d.rgender,
       img : d.poster_path,
       overview : d.overview,
       year : d.year,
-      rating_set: d.rating_set,
-      count : d.count,
-      agecount : d.agecount
+      count : d.occupationvalue,
+      agecount : d.agevalue
 
     }))
 
