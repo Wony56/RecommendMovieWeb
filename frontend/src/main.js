@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import VueCookie from 'vue-cookie'
 import App from './App.vue'
 import vuetify from './plugins/vuetify';
 import router from './router'
@@ -7,21 +6,20 @@ import store from './store'
 import api from './api'
 import carousel from 'vue-owl-carousel'
 import VueParticles from 'vue-particles'
+import VueCookies from 'vue-cookies'
+import Vuelidate from 'vuelidate'
+
+Vue.use(VueCookies)
 Vue.use(VueParticles)
-const TOKEN = 'hojin_token';
+Vue.use(Vuelidate)
 
 Vue.config.productionTip = false
 
-Vue.use(VueCookie)
-
-const tokenFromCookie = document.cookie.match('(^|;) ?' + TOKEN + '=([^;]*)(;|$)');
-
-const token = tokenFromCookie ? tokenFromCookie[2] : '';
-
-api.onAuthUser(token).then(res => {
+api.onAuthUser().then(res => {
     if (res.status === 200) {
         if (res.data) {
             store.state.auth.userInfo = res.data;
+            VueCookies.set('user', res.data.username, "30min");
         } else {
             store.state.auth.userInfo = null;
         }

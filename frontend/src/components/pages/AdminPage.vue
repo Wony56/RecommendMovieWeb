@@ -1,6 +1,5 @@
 <template>
   <v-container>
-
     <v-col cols="12">
       <v-card>
         <v-card-title>
@@ -21,6 +20,8 @@
           :search="searchUser"
           show-select
           item-key="id"
+          :loading="userLoading"
+          loading-text="Loading...Please wait"
         >
           <template v-slot:item.action="{item}">
             <v-icon small class="mr-2" @click="editUser(item)">mdi-pencil</v-icon>
@@ -59,6 +60,8 @@
           :search="searchMovie"
           show-select
           item-key="id"
+          :loading="movieLoading"
+          loading-text="Loading...Please wait"
         >
           <template v-slot:item.action="{item}">
             <v-icon small class="mr-2" @click="editMovie(item)">mdi-pencil</v-icon>
@@ -219,6 +222,20 @@ export default {
       };
 
       return options;
+    },
+    userLoading() {
+      if (this.users.length > 0) {
+        return false;
+      } else {
+        return true;
+      }
+    },
+    movieLoading() {
+      if (this.movies.length > 0) {
+        return false;
+      } else {
+        return true;
+      }
     }
   },
   watch: {

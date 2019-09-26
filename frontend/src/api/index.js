@@ -4,8 +4,7 @@ const apiUrl = '/api'
 
 export default {
   signup(params){
-    console.log(params)
-    axios.post(`${apiUrl}/auth/signup/`,{
+    return axios.post(`${apiUrl}/auth/signup/`,{
       params,
     })
   },
@@ -42,13 +41,24 @@ export default {
       params
     })
   },
-  onAuthUser(token){
-    return axios.post(`${apiUrl}/auth/login/on/`, {token})
+  logout(){
+    return axios.get(`${apiUrl}/auth/logout/`)
+  },
+  onAuthUser(){
+    return axios.get(`${apiUrl}/auth/on/`);
   },
   getSimilarMovie(params){
     return axios.get(`${apiUrl}/cluster/getClusterMovie/`, {
       params
     })
+  },
+  checkDuplicate(params){
+    return axios.post(`${apiUrl}/auth/duplicate/`, {
+      params
+    })
+  },
+  subscribe(){
+    return axios.get(`${apiUrl}/auth/subscribe/`);
   }
 
 }
