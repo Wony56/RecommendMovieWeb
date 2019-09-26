@@ -24,7 +24,10 @@ def signup(request):
         is_subscribe = profile.get('is_subscribe', None)
         subscribe_expire = datetime.now()
         seenmovie=profile.get('seenmovie',None)
-       
+        if(seenmovie == None):
+            seenmovie = "None"
+        print(seenmovie)
+        print("$$$$$$$$$$$$$$$$$$$$$$$")
         if is_subscribe:
             if is_subscribe == True:
                 subscribe_expire += timedelta(days=3)

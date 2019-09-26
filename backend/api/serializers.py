@@ -20,7 +20,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('id', 'username', 'is_staff', 'gender', 'age', 'occupation','seenmoive')
+        fields = ('id', 'username', 'is_staff', 'gender', 'age', 'occupation','seenmovie')
 
     def get_username(self, obj):
         return obj.user.username
