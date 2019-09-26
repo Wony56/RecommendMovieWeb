@@ -1,35 +1,46 @@
-from api.models import KnnAgeView
+from api.models import KnnAgeView,Movie
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from api.serializers import MovieSerializer
 
 @api_view(['GET'])
 def get_knn_age_view(request):
-    if rquest.method =='GET':
-        params = request.GET.get(params,None)
-        age = params.data.get('age',None)
+    if request.method =='GET':
+        age = request.GET.get('age', None)
+        print(age)
+        # age = params.data.get('age',None)
 
-        obj = KnnAgeView.objects.get(Age=age)
+        obj = KnnAgeView.objects.get(Age=int(age))
         genre = obj.Max_genre
 
         # 이 장르를 가진 가장 높은 평점을 가진 영화 가져오기
-        Movie.objects.all().filter(genres__icontains=genre).order_by('-ratings')
-        # serializer = MovieSerializer(moviegroups, many=True)
+        movies = Movie.objects.all().filter(genres__icontains=genre)
+        # movies = movies.order_by('-rratings')[:8]
+        print(movies)
+        serializer = MovieSerializer(movies, many=True)
         data = serializer.data
-
+        
         return Response(data=data, status=status.HTTP_200_OK)
 
 @api_view(['GET'])
 def update_knn_age_view(request):
     if request.method == 'GET' :
-        params = request.GET.get('params',None)
-        age = params.data.get('age',None)
-        movieid = params.data.get('movieid',None)
-
+        # params = request.GET.get('params',None)
+        age = request.GET.get('age',None)
+        movieid = request.GET.get('movieid',None)
+        age = int(age)
+        movieid = int(movieid)
+        print(age)
+        print(movieid)
         try :
+
             obj=KnnAgeView.objects.get(Age=age)
             movie = Movie.objects.get(id=movieid)
-            genres = movies.genres.split('|')
+            print(movie.genres)
+            genres = movie.genres.split('|')
+            print(genres)
+  
             for genre in genres:
                 if genre == 'Action':
                     obj.Action = obj.Action + 1
@@ -70,17 +81,19 @@ def update_knn_age_view(request):
             
             max_key = ''
             max_val = 0
-            
-            for key, value in obj.items():
-                if key is not 'Age' and key is not 'Max_genre':
+            # print(obj.__dict__.items())
+            for key, value in obj.__dict__.items():
+                if key is not '_state' and key is not 'Age' and key is not 'Max_genre':
                     if value > max_val:
                         max_key = key
                         max_val = value
-            
-            obj['Max_genre'] = max_key
+            # print(max_key)
+            obj.Max_genre = max_key
+            print(obj.__dict__)
             # movie.save()
             # obj.save()
             # obj.age의 장르가 max면 maxgenre 변경
+           
             obj.save()
 
             return Response(status=status.HTTP_200_OK)

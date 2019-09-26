@@ -40,33 +40,41 @@ if __name__ == '__main__':
     ages = [1,18,25,35,45,50,56]
 
     age_genre_df = pd.DataFrame(genre,columns=['genre',1,18,25,35,45,50,56])
+    age_genre_df =age_genre_df.fillna(0)
     # age_genre_df
     # pd.get_dummies(demo_df, columns=['숫자 특성', '범주형 특성'])
 
     ages = [1,18,25,35,45,50,56]
-    for idx in ages:
-        user_df[user_df['age']==idx]
 
-        usersid = user_df[user_df['age']==idx]['userid']
+    for i in range(len(user_df)):
+        min = 100
+        close_age = 100
+        age = user_df.loc[i,'age']
+    #     print(user_df.loc[i,'userid'])
+        
+        for j in ages:
+            if abs(j - age)<min:
+                min = abs(j-age)
+                close_age = j
+                
+    #     print(close_age)
+        moviesid = ratings_df[ratings_df['userid']==user_df.loc[i,'userid']]['movieid']
+    #     print(moviesid)
+        movie = movie_df.loc[movie_df['movieid'].isin(moviesid)]
+    #     print(movie)
 
-        age_genre_df[idx]=0
-
-        for i in usersid:
-            moviesid = ratings_df[ratings_df['userid']==i]['movieid']
-
-            movie = movie_df.loc[movie_df['movieid'].isin(moviesid)]
-
-            aaa=pd.DataFrame(movie.sum(axis=0))
-
-            svalue = movie.sum(axis=0)['Action':]
-
-            age_genre_df[idx] += svalue.values
+        svalue = movie.sum(axis=0)['Action':]
+    #     print(svalue.values)
+        age_genre_df[close_age] += svalue.values
+    #     print(age_genre_df)
 
     # print(age_genre_df.idxmax())
     max=pd.Series(age_genre_df[[1,18,25,35,45,50,56]].astype(float).idxmax())
     print(max)
     print(age_genre_df.iloc[max,0])
+    ## print(age_genre_df.iloc[0,1])
     print(age_genre_df)
+
 
     request_data={'knn_data':[]}
    

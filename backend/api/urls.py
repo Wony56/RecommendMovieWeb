@@ -32,4 +32,6 @@ urlpatterns = [
     url('cluster/getClusterUser/$',cluster_views.get_usergroup,name=' get_usergroup'),
 
     url('recommend/knn_age_view/$',knn_views.reg_knn_age_view,name='reg_knn_age_view'),
+    url('recommend/knn_age_view/update/$',knn_views.update_knn_age_view,name='update_knn_age_view'),
+    url('recommend/knn_age_view/get/$',knn_views.get_knn_age_view,name='get_knn_age_view'),
 ]
