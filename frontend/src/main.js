@@ -16,11 +16,11 @@ Vue.use(Vuelidate)
 Vue.config.productionTip = false
 
 api.onAuthUser().then(res => {
-    if(res.status === 200){
-        if(res.data){
+    if (res.status === 200) {
+        if (res.data) {
             store.state.auth.userInfo = res.data;
             VueCookies.set('user', res.data.username, "30min");
-        }else{
+        } else {
             store.state.auth.userInfo = null;
         }
 
@@ -32,6 +32,6 @@ api.onAuthUser().then(res => {
             render: h => h(App)
         }).$mount('#app')
     }
-}).catch(err=>{
+}).catch(err => {
     alert(err);
 })

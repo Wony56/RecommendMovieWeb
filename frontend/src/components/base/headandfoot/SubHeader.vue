@@ -28,55 +28,26 @@
       ></v-text-field>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndUp">
-      <template v-if="!loggedIn">
-        <v-btn
-          text
-          color="#ff2f6e"
-          style="margin-right:15px;"
-          @click.stop="$store.state.dialog.signinDialog = true"
-        >로그인</v-btn>
-        <v-btn
-          outlined
-          color="#ff2f6e"
-          style="margin-right:15px;"
-          @click.stop="signupdialog = true"
-        >회원가입</v-btn>
-      </template>
-      <template v-else>
+      <template v-if="loggedIn">
         <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="logout">로그아웃</v-btn>
       </template>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndDown">
-      <v-btn  v-if="!loggedIn" text color="#ff2f6e" fab @click.stop="$store.state.dialog.signinDialog = true">
-        <v-icon>mdi-login-variant</v-icon>
-      </v-btn>
-       <v-btn v-else text color="#ff2f6e" fab @click="logout"><v-icon>mdi-logout-variant</v-icon></v-btn>
-      <v-btn text color="#ff2f6e" fab @click.stop="signupdialog = true">
-        <v-icon>mdi-account-plus</v-icon>
+      <v-btn v-if="loggedIn" text color="#ff2f6e" fab @click="logout">
+        <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
     </v-layout>
-    <v-dialog v-model="signupdialog" max-width="400">
-      <SignUpPanel />
-    </v-dialog>
-    <v-dialog v-model="$store.state.dialog.signinDialog" max-width="400">
-      <SingInPanel />
-    </v-dialog>
   </v-app-bar>
 </template>
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import SignUpPanel from "../login/SignUpPanel.vue";
-import SingInPanel from "../login/SignInPanel.vue";
+import api from "../../../api";
+
 export default {
-  components: {
-    SignUpPanel,
-    SingInPanel
-  },
+  components: {},
   data() {
     return {
-      signindialog: false,
-      signupdialog: false,
       loading: false,
       items: [],
       search: null,
@@ -96,9 +67,22 @@ export default {
       this.searchMovies(params);
     },
     logout() {
-      alert(this.$store.state.auth.userInfo.name + "님 로그아웃하셨습니다.");
-      this.$cookie.delete("hojin_token");
-      this.$store.state.auth.userInfo = null;
+      api
+        .logout()
+        .then(res => {
+          if (res.status === 200) {
+            alert(
+              this.$store.state.auth.userInfo.username +
+                "님 로그아웃하셨습니다."
+            );
+            this.$cookies.remove("user");
+            this.$store.state.auth.userInfo = null;
+            this.$router.push("/entrance");
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
     }
   }
 };

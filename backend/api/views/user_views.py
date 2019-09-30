@@ -18,12 +18,14 @@ def edit_profile(request):
                         occupation = edited_user.get('occupation', None)
                         gender = edited_user.get('gender', None)
                         age = edited_user.get('age', None)
+                        seenmovie = edited_user.get('seenmovie',None)
 
                         profile = Profile.objects.get(user=user)
 
                         profile.occupation = occupation
                         profile.gender = gender
                         profile.age = age
+                        profile.seenmovie = seenmovie
                         profile.save()
 
                         return Response(status=status.HTTP_200_OK)

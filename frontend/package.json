@@ -9,6 +9,7 @@
   },
   "dependencies": {
     "@glidejs/glide": "^3.3.0",
+    "apexcharts": "^3.8.6",
     "axios": "^0.19.0",
     "core-js": "^2.6.5",
     "hooper": "^0.3.4",

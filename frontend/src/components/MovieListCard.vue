@@ -28,7 +28,7 @@
                 />
               </div>
               <v-row class="justify-center my-2" style="color:#fff;">
-                <span style="font-size:12px;">rating : {{ rating.toFixed(1) }}</span>
+                <span style="font-size:12px;">rating : {{ rating.toFixed(2) }}</span>
               </v-row>
               <v-row class="justify-center my-2" style="color:#fff;">
                 <span style="font-size:12px;">viewer : {{ viewCnt }}</span>
@@ -40,7 +40,7 @@
                 outlined
                 block
                 @click.stop="dialog = true"
-                @click="godetail(id,i)"
+                @click="godetail(id)"
               >detail</v-btn>
             </v-col>
           </div>
@@ -84,7 +84,7 @@
                   >{{ rating.toFixed(1) }}</span>
                 </div>
                 <div class="mx-7 my-4" style="background-color:#2e2e2e">
-                <v-flex>
+                <!-- <v-flex>
                     <v-btn
                       text
                       color="#fff"
@@ -93,10 +93,10 @@
                       :to="`/user/detail/${user.user-1}`"
                     >User{{user.user-1}}</v-btn>
                   
-                </v-flex>
+                </v-flex> -->
                 </div>
                 <div>
-                  <TopEight :movieId='id'/>
+                  <!-- <TopEight :movieId='id'/> -->
                 </div>
               </v-flex>
             </v-row>
@@ -128,7 +128,7 @@
                 />
               </div>
               <v-row class="justify-center my-2" style="color:#fff;">
-                <span style="font-size:12px;">rating : {{ rating.toFixed(1) }}</span>
+                <span style="font-size:12px;">rating : {{ rating.toFixed(2) }}</span>
               </v-row>
               <v-row class="justify-center my-2" style="color:#fff;">
                 <span style="font-size:12px;">viewer : {{ viewCnt }}</span>
@@ -180,7 +180,7 @@
                   <v-icon style="color:gray; margin-left:10px;">mdi-star</v-icon>
                   <span style=" margin-left:10px; color:#ff2f6e ">{{ rating.toFixed(1) }}</span>
                 </div>
-                <div>
+                <!-- <div>
                   <v-card flat>
                     <v-btn
                       text
@@ -189,9 +189,9 @@
                       :to="`/user/detail/${user.user-1}`"
                     >User{{user.user-1}}</v-btn>
                   </v-card>
-                </div>
+                </div> -->
                 <div>
-                  <TopEight/>
+                  <!-- <TopEight/> -->
                 </div>
               </v-flex>
             </v-row>
@@ -264,7 +264,7 @@ export default {
     }
   },
   methods: {
-    godetail(id, idx) {
+    godetail(id) {
       // console.log(this.movieListCards,id,idx)
       this.$emit("update:view-cnt", this.viewCnt+1);
       // this.movieListCards[idx]['viewCnt']++ 
