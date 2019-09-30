@@ -44,8 +44,6 @@ if __name__ == '__main__':
     # age_genre_df
     # pd.get_dummies(demo_df, columns=['숫자 특성', '범주형 특성'])
 
-    ages = [1,18,25,35,45,50,56]
-
     for i in range(len(user_df)):
         min = 100
         close_age = 100
