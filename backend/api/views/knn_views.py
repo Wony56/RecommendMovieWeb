@@ -1,14 +1,17 @@
-from api.models import KnnAgeView,Movie
+from api.models import KnnAgeView,Movie,Rating,Profile
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from api.serializers import MovieSerializer
+from django.contrib.auth.models import User
 
 @api_view(['GET'])
 def get_knn_age_view(request):
     if request.method =='GET':
         age = request.GET.get('age', None)
+        userid = request.GET.get('id',None)
         print(age)
+        print(userid)
         # age = params.data.get('age',None)
 
         obj = KnnAgeView.objects.get(Age=int(age))
@@ -16,8 +19,18 @@ def get_knn_age_view(request):
 
         # 이 장르를 가진 가장 높은 평점을 가진 영화 가져오기
         movies = Movie.objects.all().filter(genres__icontains=genre)
-        # movies = movies.order_by('-rratings')[:8]
-        print(movies)
+
+        user = User.objects.get(username = userid)
+        isSeen = Rating.objects.filter(user = user).values_list('movie',flat=True)
+        print(isSeen)
+        movies = movies.exclude(id__in=isSeen)
+        
+        # movies = movies.order_by('-ratings')[:8]
+        # print(movies.count())
+        if movies.count()>=8:
+            movies = movies[:8]
+        # movies=movies[:8]
+
         serializer = MovieSerializer(movies, many=True)
         data = serializer.data
         
