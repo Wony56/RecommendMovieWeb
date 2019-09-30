@@ -1,6 +1,7 @@
 from .models import Profile, Movie, Rating
 from rest_framework import serializers
 
+
 class RatingSerializer(serializers.ModelSerializer):
     # movie_name = serializers.SerializerMethodField('get_moivename')
     # user_name = serializers.SerializerMethodField('get_username')
