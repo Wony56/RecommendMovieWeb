@@ -10,6 +10,7 @@ urlpatterns = [
     url('movies/$', movie_views.movies, name='movie_list'),
     url('movies/delete/$', movie_views.movies, name='movie_delete'),
     url('movies/edit/$', movie_views.edit_movie, name='edit_movie'),
+    url('movies/watch-list/$', movie_views.movie_by_user, name='watch_list'),
     url('ratings/$', rating_views.ratings, name='rating_list'),
     url('update_view_cnt/$', movie_views.update_view_cnt, name='update_view_cnt'),
     url('auth/detail/$', auth_views.get_profile, name='get_profile'),
