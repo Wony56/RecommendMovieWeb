@@ -7,7 +7,7 @@ import UserDetailPage from '../components/pages/UserDetailPage'
 import AdminPage from '../components/pages/AdminPage'
 import UserPage from '../components/user/views/UserPage'
 import EntrancePage from '../components/auth/views/LandingPage'
-
+import SubScribePage from '../components/subscribe/views/SubscribePage'
 import store from '../store'
 
 Vue.use(VueRouter)
@@ -22,6 +22,7 @@ const router = new VueRouter({
         { path: '/user/detail/:id', component: UserDetailPage, name: 'user-detail', meta: { requiresLogin: true } },
         { path: '/admin', component: AdminPage, name: 'admin', meta: { requiresAuth: true } },
         { path: '/entrance', component: EntrancePage, name: 'entrance', meta: { requiresLogin: false } },
+        { path: '/subscribe', component: SubScribePage, name: 'subscribe', meta: { requiresLogin: false } },
         { path: '/user', component: UserPage, name: 'user' }
     ],
     scrollBehavior() {
@@ -33,10 +34,10 @@ router.beforeEach((to, from, next) => {
     if (to.matched.some(record => record.meta.requiresLogin)) {
         if (!store.getters.loggedIn) {
             next('/entrance');
-        } else{
+        } else {
             next();
         }
-    }else if (!to.matched.some(record => record.meta.requiresLogin) && store.getters.loggedIn) {
+    } else if (!to.matched.some(record => record.meta.requiresLogin) && store.getters.loggedIn) {
         next('/');
     } else if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.getters.loggedIn || !store.state.auth.userInfo.is_staff) {
