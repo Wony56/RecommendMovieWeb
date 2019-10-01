@@ -25,12 +25,12 @@ def get_knn_age_view(request):
         print(isSeen)
         movies = movies.exclude(id__in=isSeen)
         
-        # movies = movies.order_by('-ratings')[:8]
+        movies = movies.order_by('-rrating')
         # print(movies.count())
         if movies.count()>=8:
             movies = movies[:8]
         # movies=movies[:8]
-
+        print(movies)
         serializer = MovieSerializer(movies, many=True)
         data = serializer.data
         
