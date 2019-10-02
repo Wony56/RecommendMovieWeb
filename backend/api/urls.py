@@ -23,6 +23,7 @@ urlpatterns = [
     url('auth/logout/$', auth_views.logout, name='logout'),
     url('auth/on/$', auth_views.on_auth_state, name='on_auth'),
     url('auth/duplicate/$', auth_views.user_duplicate, name='user_duplicate'),
+    url('auth/subscribe/$', auth_views.update_subscribe, name='update_subscribe'),
 
     url('auth/api-token-auth/', obtain_jwt_token),
     url('auth/api-token-refresh/', refresh_jwt_token),

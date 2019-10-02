@@ -60,6 +60,9 @@ export default {
   subscribe(){
     return axios.get(`${apiUrl}/auth/subscribe/`);
   },
+  getProfile(){
+    return axios.get(`${apiUrl}/auth/detail/`);
+  },
   watchList(params){
     return axios.get(`${apiUrl}/movies/watch-list/`, {
       params
