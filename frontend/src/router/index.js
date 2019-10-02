@@ -19,10 +19,9 @@ const router = new VueRouter({
         { path: '/', component: EmptyPage, name: 'home', meta: { requiresLogin: true } },
         { path: '/movies/search', component: MovieSearchPage, name: 'movie-search', meta: { requiresLogin: true } },
         { path: '/movies/detail', component: MovieDetailPage, name: 'movie-detail', meta: { requiresLogin: true } },
-        { path: '/user/detail/:id', component: UserDetailPage, name: 'user-detail', meta: { requiresLogin: true } },
+        { path: '/user/detail/:id', component: UserPage, name: 'user-detail', meta: { requiresLogin: true } },
         { path: '/admin', component: AdminPage, name: 'admin', meta: { requiresAuth: true } },
         { path: '/entrance', component: EntrancePage, name: 'entrance', meta: { requiresLogin: false } },
-        { path: '/user', component: UserPage, name: 'user' }
     ],
     scrollBehavior() {
         return { x: 0, y: 0 }
