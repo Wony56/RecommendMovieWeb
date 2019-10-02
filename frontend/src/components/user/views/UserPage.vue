@@ -119,6 +119,12 @@ export default {
         .then(res => {
           if (res.status === 200) {
             alert("구독 업데이트 완료");
+            //사용자 정보 업데이트
+            api.getProfile().then(res => {
+              if (res.status === 200) {
+                this.$store.state.auth.userInfo = res.data;
+              }
+            });
           }
         })
         .catch(err => {
