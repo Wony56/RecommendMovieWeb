@@ -22,7 +22,13 @@
               <p>Gender : {{user.gender}}</p>
               <p>SubScirbe : {{subscribeInfo}}</p>
               <span>SubScribe term : {{expireDate}}</span>
-              <v-btn style="margin-left:10px; margin-top:-5px" text x-small color="#ff2f6e">기간 연장</v-btn>
+              <v-btn
+                style="margin-left:10px; margin-top:-5px"
+                text
+                x-small
+                color="#ff2f6e"
+                @click="subscibe"
+              >기간 연장</v-btn>
               <!--<v-btn style="margin-left:10px; margin-top:-5px" text x-small color="#ff2f6e">해지</v-btn>
               <v-btn style="margin-left:10px; margin-top:-5px" text x-small color="#ff2f6e">구독</v-btn>-->
               <v-btn style="margin-top:15px" outlined color="#ff2f6e" block>회원 정보 수정</v-btn>
@@ -84,7 +90,7 @@ export default {
     },
     expireDate: function() {
       if (this.user.is_subscribe) {
-        return `~ ${this.user.subscribe_expire.substring(0, 10)}`;
+        return ` ~ ${this.user.subscribe_expire.substring(0, 10)}`;
       } else {
         return " - ";
       }
@@ -105,6 +111,20 @@ export default {
       .catch(err => {
         alert(err);
       });
+  },
+  methods: {
+    subscibe() {
+      api
+        .subscribe()
+        .then(res => {
+          if (res.status === 200) {
+            alert("구독 업데이트 완료");
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
+    }
   }
 };
 </script>
