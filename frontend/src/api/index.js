@@ -67,6 +67,15 @@ export default {
     return axios.get(`${apiUrl}/movies/watch-list/`, {
       params
     })
-  }
-
+  },
+  recommendSVD(params){
+    return axios.get(`${apiUrl}/recommend/svd/`,{
+      params,
+    })
+  },
+  recommendKNN(params){
+    return axios.get(`${apiUrl}/recommend/knn_age_view/get/`,{
+      params,
+    })
+  },
 }

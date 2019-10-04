@@ -64,11 +64,11 @@ def ratings(request):
         return Response(status=status.HTTP_200_OK)
 
 
-@api_view(['POST'])
+@api_view(['GET'])
 def svd(request):
-    if request.method =='POST':
-        userid = request.GET.get('id',None)
-
+    if request.method =='GET':
+        userid = request.GET.get('username',None)
+        
         ratings = Rating.objects.all()
 
         ratings_df =  pd.DataFrame(list(ratings.values('user__username','movie_id','rating')))
