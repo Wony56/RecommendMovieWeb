@@ -28,11 +28,18 @@
       ></v-text-field>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndUp">
+      <template>
+        <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="profile">프로필</v-btn>
+      </template>
       <template v-if="loggedIn">
+        <v-btn text color="#ff2f6e">회원정보</v-btn>
         <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="logout">로그아웃</v-btn>
       </template>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndDown">
+      <v-btn v-if="loggedIn" fab color="#ff2f6e">
+        <v-icon>mdi-account-circle-outline</v-icon>
+      </v-btn>
       <v-btn v-if="loggedIn" text color="#ff2f6e" fab @click="logout">
         <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
@@ -41,7 +48,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import api from "../../../api";
 
 export default {
@@ -54,7 +61,12 @@ export default {
       select: null
     };
   },
-  computed: mapGetters(["loggedIn"]),
+  computed: {
+    ...mapState({
+      user: state => state.auth.userInfo
+    }),
+    ...mapGetters(["loggedIn"])
+  },
   methods: {
     ...mapActions("data", ["searchMovies"]),
     searchByEnter() {
@@ -71,10 +83,7 @@ export default {
         .logout()
         .then(res => {
           if (res.status === 200) {
-            alert(
-              this.$store.state.auth.userInfo.username +
-                "님 로그아웃하셨습니다."
-            );
+            alert(this.user.username + "님 로그아웃하셨습니다.");
             this.$cookies.remove("user");
             this.$store.state.auth.userInfo = null;
             this.$router.push("/entrance");
@@ -83,6 +92,9 @@ export default {
         .catch(err => {
           alert(err);
         });
+    },
+    profile() {
+      this.$router.push(`/user/detail/${this.user.username}`);
     }
   }
 };

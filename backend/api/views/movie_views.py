@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from api.models import Movie,Rating
+from django.contrib.auth.models import User
 from api.serializers import MovieSerializer
 from rest_framework.response import Response
 from django.db.models import Q
@@ -226,3 +227,26 @@ def edit_movie(request):
                 raise ValueError
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def movie_by_user(request):
+    if request.method == 'GET':
+        username = request.GET.get('username', None)
+            
+        try:
+            user = User.objects.get(username=username)
+            watchList = Rating.objects.get(user=user)
+
+            query = Q()
+            for element in watchList:
+                query = query | Q(id=element.movie.id)
+            movies = movie.filter(query)
+
+            serializer = MovieSerializer(movies, many=True)
+            data = serializer.data
+
+        except:
+            return Response(status=status.HTTP_200_OK)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+

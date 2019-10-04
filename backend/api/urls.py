@@ -11,6 +11,7 @@ urlpatterns = [
     url('movies/$', movie_views.movies, name='movie_list'),
     url('movies/delete/$', movie_views.movies, name='movie_delete'),
     url('movies/edit/$', movie_views.edit_movie, name='edit_movie'),
+    url('movies/watch-list/$', movie_views.movie_by_user, name='watch_list'),
     url('ratings/$', rating_views.ratings, name='rating_list'),
     url('update_view_cnt/$', movie_views.update_view_cnt, name='update_view_cnt'),
     url('auth/detail/$', auth_views.get_profile, name='get_profile'),
@@ -22,6 +23,7 @@ urlpatterns = [
     url('auth/logout/$', auth_views.logout, name='logout'),
     url('auth/on/$', auth_views.on_auth_state, name='on_auth'),
     url('auth/duplicate/$', auth_views.user_duplicate, name='user_duplicate'),
+    url('auth/subscribe/$', auth_views.update_subscribe, name='update_subscribe'),
 
     url('auth/api-token-auth/', obtain_jwt_token),
     url('auth/api-token-refresh/', refresh_jwt_token),
