@@ -7,7 +7,7 @@ import UserDetailPage from '../components/pages/UserDetailPage'
 import AdminPage from '../components/pages/AdminPage'
 import UserPage from '../components/user/views/UserPage'
 import EntrancePage from '../components/auth/views/LandingPage'
-
+import SubScribePage from '../components/subscribe/views/SubscribePage'
 import store from '../store'
 
 Vue.use(VueRouter)
