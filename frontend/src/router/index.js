@@ -19,11 +19,9 @@ const router = new VueRouter({
         { path: '/', component: EmptyPage, name: 'home', meta: { requiresLogin: true } },
         { path: '/movies/search', component: MovieSearchPage, name: 'movie-search', meta: { requiresLogin: true } },
         { path: '/movies/detail', component: MovieDetailPage, name: 'movie-detail', meta: { requiresLogin: true } },
-        { path: '/user/detail/:id', component: UserDetailPage, name: 'user-detail', meta: { requiresLogin: true } },
+        { path: '/user/detail/:id', component: UserPage, name: 'user-detail', meta: { requiresLogin: true } },
         { path: '/admin', component: AdminPage, name: 'admin', meta: { requiresAuth: true } },
         { path: '/entrance', component: EntrancePage, name: 'entrance', meta: { requiresLogin: false } },
-        { path: '/subscribe', component: SubScribePage, name: 'subscribe', meta: { requiresLogin: false } },
-        { path: '/user', component: UserPage, name: 'user' }
     ],
     scrollBehavior() {
         return { x: 0, y: 0 }
@@ -37,8 +35,7 @@ router.beforeEach((to, from, next) => {
         } else {
             next();
         }
-    } else if (!to.matched.some(record => record.meta.requiresLogin) && store.getters.loggedIn) {
-        next('/');
+        
     } else if (to.matched.some(record => record.meta.requiresAuth)) {
         if (!store.getters.loggedIn || !store.state.auth.userInfo.is_staff) {
             alert("관리자권한이 없습니다...")

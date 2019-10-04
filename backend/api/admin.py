@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import Profile, Movie, Rating,UserCluster,movieCluster
+from .models import KnnAgeView
 # Register your models here.
 
 class profile(admin.ModelAdmin):
@@ -13,3 +14,4 @@ admin.site.register(Profile, profile)
 admin.site.register(Rating)
 admin.site.register(UserCluster)
 admin.site.register(movieCluster, movie_cluster)
+admin.site.register(KnnAgeView)

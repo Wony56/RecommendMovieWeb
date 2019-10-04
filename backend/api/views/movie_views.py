@@ -1,6 +1,7 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
 from api.models import Movie,Rating
+from django.contrib.auth.models import User
 from api.serializers import MovieSerializer
 from rest_framework.response import Response
 from django.db.models import Q
@@ -114,10 +115,43 @@ def movies(request):
 
     if request.method == 'POST':
         movies = request.data.get('movies', None)
-        for movie in movies:
-            id = movie.get('id', None)
-            title = movie.get('title', None)
-            genres = movie.get('genres', None)
+        for key in movies:
+            
+
+            id = movies[key].get('id', None)
+            title = movies[key].get('title', None)
+            genres = movies[key].get('genres', None)
+            rusercount = movies[key].get('rusercount',None)
+            rrating = movies[key].get('rrating',None)
+            rgender = movies[key].get('rgender',None)
+            academiceducatorcount = movies[key].get('academiceducatorcount',None)
+            artistcount = movies[key].get('artistcount',None)
+            clericaladmincount = movies[key].get('clericaladmincount',None)
+            collegegradstudentcount = movies[key].get('collegegradstudentcount',None)
+            customerservicecount = movies[key].get('customerservicecount',None)
+            doctorhealthcarecount = movies[key].get('doctorhealthcarecount',None)
+            executivemanagerialcount = movies[key].get('executivemanagerialcount',None)
+            farmercount = movies[key].get('farmercount',None)
+            homemakercount = movies[key].get('homemakercount',None)
+            K12studentcount = movies[key].get('K12studentcount',None)
+            lawyercount = movies[key].get('lawyercount',None)
+            programmercount = movies[key].get('programmercount',None)
+            retiredcount = movies[key].get('retiredcount',None)
+            salesmarketingcount = movies[key].get('salesmarketingcount',None)
+            scientistcount = movies[key].get('scientistcount',None)
+            selfemployedcount = movies[key].get('selfemployedcount',None)
+            technicianengineercount = movies[key].get('technicianengineercount',None)
+            tradesmancraftsmancount = movies[key].get('tradesmancraftsmancount',None)
+            unemployedcount = movies[key].get('unemployedcount',None)
+            writercount = movies[key].get('writercount',None)
+            age1count = movies[key].get('age1count',None)
+            age18count = movies[key].get('age18count',None)
+            age25count = movies[key].get('age25count',None)
+            age35count = movies[key].get('age35count',None)
+            age45count = movies[key].get('age45count',None)
+            age50count = movies[key].get('age50count',None)
+            age56count = movies[key].get('age56count',None)
+            othercount = movies[key].get('othercount',None)
             if not (id and title and genres):
                 continue
             if Movie.objects.filter(id=id).count() > 0 or Movie.objects.filter(title=title).count() > 0:
@@ -153,11 +187,22 @@ def movies(request):
             if results['poster_path'] == None :
                 results['poster_path'] = ""
             poster_path = 'https://image.tmdb.org/t/p/original'+ results['poster_path']
+            
             # example
             # model -> Movie -> item 필드추가하면됨
             # item = results['item']
             # movie=Movie(id=id, item = item)
-            movie=Movie(id=id, title=title, genres='|'.join(genres), tmdb_id=tmdb_id, overview=overview,year=year, poster_path=poster_path).save()
+            movie=Movie(id=id, title=title, genres='|'.join(genres), rusercount = rusercount, rrating=rrating,
+            rgender=rgender,othercount=othercount,academiceducatorcount=academiceducatorcount,artistcount=artistcount,
+            clericaladmincount=clericaladmincount,collegegradstudentcount=collegegradstudentcount,
+            customerservicecount=customerservicecount,doctorhealthcarecount=doctorhealthcarecount,
+            executivemanagerialcount=executivemanagerialcount,farmercount=farmercount,homemakercount=homemakercount,
+            K12studentcount=K12studentcount,lawyercount=lawyercount,programmercount=programmercount,
+            retiredcount=retiredcount,salesmarketingcount=salesmarketingcount,scientistcount=scientistcount,
+            selfemployedcount=selfemployedcount,technicianengineercount=technicianengineercount,tradesmancraftsmancount=tradesmancraftsmancount,
+            unemployedcount=unemployedcount,writercount=writercount,age1count=age1count,
+            age18count=age18count,age25count=age25count,age35count=age35count,age45count=age45count,
+            age50count=age50count,age56count=age56count, tmdb_id=tmdb_id, overview=overview,year=year, poster_path=poster_path).save()
         return Response(status=status.HTTP_200_OK)
 
 @api_view(['POST'])
@@ -182,3 +227,26 @@ def edit_movie(request):
                 raise ValueError
         except:
             return Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['GET'])
+def movie_by_user(request):
+    if request.method == 'GET':
+        username = request.GET.get('username', None)
+            
+        try:
+            user = User.objects.get(username=username)
+            watchList = Rating.objects.get(user=user)
+
+            query = Q()
+            for element in watchList:
+                query = query | Q(id=element.movie.id)
+            movies = movie.filter(query)
+
+            serializer = MovieSerializer(movies, many=True)
+            data = serializer.data
+
+        except:
+            return Response(status=status.HTTP_200_OK)
+
+        return Response(data=data, status=status.HTTP_200_OK)
+

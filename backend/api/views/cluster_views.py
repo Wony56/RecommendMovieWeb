@@ -20,7 +20,7 @@ def get_usergroup(request):
         usergroups = usergroups.filter(group = groupnum)
         if usergroups.count()>8:
             usergroups[:8]
-        serializer = MovieSerializer(moviegroups, many=True)
+        serializer = ProfileSerializer(usersgroups, many=True)
         data = serializer.data
         
         return Response(data=data, status=status.HTTP_200_OK)
