@@ -26,8 +26,6 @@
 
 <script>
 import ImgBanner from "../base/ImgBanner.vue";
-import api from "../../api";
-import SubScribePage from "../subscribe/views/SubscribePage";
 
 export default {
   components: {
@@ -46,7 +44,7 @@ export default {
   },
   methods: {
     subscribe() {
-      
+      this.$router.push('subscribe');
     }
   }
 };
