@@ -29,6 +29,7 @@ import ImgBanner from "../base/ImgBanner.vue";
 
 export default {
   components: {
+    SubScribePage,
     ImgBanner
   },
   data: () => ({
