@@ -2,11 +2,11 @@
   <v-container class="pa-2" fluid grid-list-md>
     <v-layout justify-end>
       <v-btn-toggle v-model="text">
-        <v-btn text value="searchbyviewcount">조회수</v-btn>
-        <v-btn text value="searchbyrating">평점</v-btn>
-        <v-btn text value="searchbygender">성별</v-btn>
-        <v-btn text value="searchbyoccupation">직업별</v-btn>
-        <v-btn text value="searchbyage">연령별</v-btn>23
+        <v-btn text outlined color="#ff2f6e" value="searchbyviewcount">조회수</v-btn>
+        <v-btn text outlined color="#ff2f6e" value="searchbyrating">평점</v-btn>
+        <v-btn text outlined color="#ff2f6e" value="searchbygender">성별</v-btn>
+        <v-btn text outlined color="#ff2f6e" value="searchbyoccupation">직업별</v-btn>
+        <v-btn text outlined color="#ff2f6e" value="searchbyage">연령별</v-btn>
       </v-btn-toggle>
       <v-select v-model="value" :items="lists[text]"></v-select>
     </v-layout>

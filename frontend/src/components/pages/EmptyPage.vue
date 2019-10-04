@@ -26,7 +26,6 @@
 
 <script>
 import ImgBanner from "../base/ImgBanner.vue";
-import api from "../../api";
 
 export default {
   components: {
@@ -44,17 +43,7 @@ export default {
   },
   methods: {
     subscribe() {
-      //구독신청
-      api
-        .subscribe()
-        .then(res => {
-          if (res.status === 200) {
-            //구독 성공
-          }
-        })
-        .catch(err => {
-          alert(err);
-        });
+      this.$router.push('subscribe');
     }
   }
 };

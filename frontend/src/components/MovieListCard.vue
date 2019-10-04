@@ -61,17 +61,17 @@
                 <div class="mx-7 mx-3" style="color:lightgray">{{ genresStr }}</div>
                 <div class="mx-7 mx-3" style="color:lightgray">{{ year }}</div>
                 <!-- 날짜 -->
-                <div class="mx-7">
+                <div class="mx-7 row">
                   <v-rating
                     large
                     :value="rating"
                     color="#ff2f6e"
                     background-color="white"
                     half-increments
-                    dense
-                    readonly
                     class="justify-center my-2"
+                    row
                   />
+                  <v-btn text style="margin-top:17px" color="#ff2f6e" @click="pushrating()">평점주기</v-btn>
                 </div>
                 <div class="mx-7" style="line-height: 1.3em; color:gray;">{{overview}}</div>
                 <!-- 이위에 영화내용 -->
