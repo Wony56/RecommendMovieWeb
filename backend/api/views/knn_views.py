@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 def get_knn_age_view(request):
     if request.method =='GET':
         age = request.GET.get('age', None)
-        userid = request.GET.get('id',None)
+        userid = request.GET.get('username',None)
         print(age)
         print(userid)
         # age = params.data.get('age',None)
@@ -25,12 +25,12 @@ def get_knn_age_view(request):
         print(isSeen)
         movies = movies.exclude(id__in=isSeen)
         
-        # movies = movies.order_by('-ratings')[:8]
+        movies = movies.order_by('-rrating')
         # print(movies.count())
         if movies.count()>=8:
             movies = movies[:8]
         # movies=movies[:8]
-
+        print(movies)
         serializer = MovieSerializer(movies, many=True)
         data = serializer.data
         
@@ -113,9 +113,9 @@ def update_knn_age_view(request):
         except :
             return Response(status=status.HTTP_200_OK)
 
-@api_view(['POST'])
+@api_view(['GET'])
 def reg_knn_age_view(request):
-    if request.method == 'POST':
+    if request.method == 'GET':
         knn_age_views = request.data.get('knn_data',None)
         print(knn_age_views)
       
