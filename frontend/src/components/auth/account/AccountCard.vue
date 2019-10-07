@@ -180,7 +180,7 @@ export default {
                     localStorage.setItem("saveCheck", true);
                     localStorage.setItem("saveUser", res.data.username);
 
-                    this.$router.push("/");
+                    this.$router.push("/subscribe");
                   }
                 })
                 .catch(err => {
