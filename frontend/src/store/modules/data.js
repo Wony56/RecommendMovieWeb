@@ -30,7 +30,7 @@ const actions = {
       overview : d.overview,
       year : d.year,
       count : d.occupationvalue,
-      agecount : d.agevalue
+      agecount : d.agevalue,
 
     }))
 

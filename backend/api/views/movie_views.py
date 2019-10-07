@@ -6,6 +6,8 @@ from api.serializers import MovieSerializer
 from rest_framework.response import Response
 from django.db.models import Q
 from django.db.models import Count, Case, When, F
+from django.contrib.auth.models import User
+from api.models import Profile
 import requests
 
 @api_view(['GET'])
@@ -19,6 +21,112 @@ def update_view_cnt(request) :
             return Response(status=status.HTTP_200_OK)
         except :
             return Response(status=status.HTTP_200_OK)
+
+
+@api_view(['GET'])
+def update_rating(request) :
+    if request.method == 'GET' :
+        print("ddddddddddddddddddddddd")
+        id = request.GET.get('id',None)
+        ratings = request.GET.get('ratings',None)
+        try :
+            movie = Movie.objects.get(id=id)
+            temp = movie.rrating * movie.rusercount
+            temp = float(temp) + float(ratings)
+            temp = temp / (movie.rusercount + 1)
+            movie.rusercount = movie.rusercount + 1
+
+            movie.rrating = temp
+
+
+
+            user_by_cookie = request.COOKIES.get('user')
+            user_by_session = request.session.get('user', None)
+
+            if user_by_session and user_by_cookie:
+               
+                if user_by_session == user_by_cookie:
+                    user = User.objects.get(username=user_by_session)
+                    profile = Profile.objects.get(user=user)
+                    
+                    print(profile.user)
+                    if profile.occupation == 'other':
+                        movie.othercount = movie.othercount +1
+                    elif profile.occupation == 'academic/educator':
+                        movie.academiceducatorcount = movie.academiceducatorcount +1
+                    elif profile.occupation == 'artist':
+                        movie.artistcount = movie.artistcount +1
+                    elif profile.occupation == 'clerical/admin':
+                        movie.clericaladmincount = movie.clericaladmincount +1
+                    elif profile.occupation == 'college/grad student':
+                        movie.collegegradstudentcount = movie.collegegradstudentcount +1
+                    elif profile.occupation == 'customer service':
+                        movie.customerservicecount = movie.customerservicecount +1
+                    elif profile.occupation == 'doctor/health care':
+                        movie.doctorhealthcarecount = movie.doctorhealthcarecount +1
+                    elif profile.occupation == 'executive/managerial':
+                        movie.executivemanagerialcount = movie.executivemanagerialcount +1
+                    elif profile.occupation == 'farmer':
+                        movie.farmercount = movie.farmercount +1
+                    elif profile.occupation == 'homemaker':
+                        movie.homemakercount = movie.homemakercount +1
+                    elif profile.occupation == 'K-12 student':
+                        movie.K12studentcount = movie.K12studentcount +1
+                    elif profile.occupation == 'lawyer':
+                        movie.lawyercount = movie.lawyercount +1
+                    elif profile.occupation == 'programmer':
+                        movie.programmercount = movie.programmercount +1
+                    elif profile.occupation == 'retired':
+                        movie.retiredcount = movie.retiredcount +1
+                    elif profile.occupation == 'sales/marketing':
+                        movie.salesmarketingcount = movie.salesmarketingcount +1
+                    elif profile.occupation == 'scientist':
+                        movie.scientistcount = movie.scientistcount +1
+                    elif profile.occupation == 'self-employed':
+                        movie.selfemployedcount = movie.selfemployedcount +1
+                    elif profile.occupation == 'technician/engineer':
+                        movie.technicianengineercount = movie.technicianengineercount +1
+                    elif profile.occupation == 'tradesman/craftsman':
+                        movie.tradesmancraftsmancount = movie.tradesmancraftsmancount +1
+                    elif profile.occupation == 'unemployed':
+                        movie.unemployedcount = movie.unemployedcount +1
+                    elif profile.occupation == 'writer':
+                        movie.writercount = movie.writercount +1
+
+                    if(profile.gender == 'F') :
+                         movie.rgender = movie.rgender-1
+                    else :
+                         movie.rgender +=1
+
+                    if(profile.age == 1):
+                         movie.age1count +=1
+                    elif(profile.age == 18):
+                         movie.age18count +=1  
+                    elif(profile.age == 25):
+                         movie.age25count +=1  
+                    elif(profile.age == 35):
+                         movie.age35count +=1  
+                    elif(profile.age == 45):
+                         movie.age45count +=1  
+                    elif(profile.age == 50):
+                         movie.age50count +=1  
+                    elif(profile.age == 56):
+                         movie.age56count +=1  
+                    # if profile.is_subscribe == True:
+                    #     profile.subscribe_expire += timedelta(days=3)
+                    # else:
+                    #     profile.is_subscribe = True;
+                    #     profile.subscribe_expire = datetime.now() + timedelta(days=3)
+                    # profile.save()
+
+
+            movie.save()
+            return Response(status=status.HTTP_200_OK)
+        except :
+            return Response(status=status.HTTP_200_OK)
+
+
+
 
 @api_view(['GET', 'POST', 'DELETE'])
 def movies(request):

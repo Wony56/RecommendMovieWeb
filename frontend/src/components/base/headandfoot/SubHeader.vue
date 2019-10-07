@@ -69,7 +69,7 @@ export default {
     ...mapActions("data", ["searchMovies"]),
     searchByEnter() {
       this.$router.push("/movies/search");
-
+      this.$store.state.search=this.search;
       const params = {
         title: this.search
       };
