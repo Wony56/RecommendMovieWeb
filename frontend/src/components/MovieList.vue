@@ -21,7 +21,7 @@
           :view-cnt.sync="card.viewCnt"
           :overview="card.overview"
           :year="card.year"
-          :rating_set="card.rating_set"
+          :rusercount="card.rusercount"
           :movieListCards="movieListCards"
         />
       </v-flex>

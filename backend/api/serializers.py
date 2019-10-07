@@ -42,7 +42,7 @@ class MovieSerializer(serializers.ModelSerializer):
     #rating_set = RatingSerializer(many=True)
     class Meta:
         model = Movie
-        fields = ('id', 'title', 'genres_array','view_cnt','rrating','agevalue','occupationvalue','rgender','year','overview','poster_path',
+        fields = ('id', 'title', 'genres_array','view_cnt','rrating','agevalue','occupationvalue','rgender','year','overview','poster_path'
             )
         # ,'view_cnt','rating'
     def get_viewCnt(self, obj):

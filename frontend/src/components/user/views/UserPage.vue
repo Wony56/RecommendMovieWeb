@@ -41,9 +41,6 @@
               style="background-color:#ff2f6e; color:#fff;"
               class="text-center py-1"
             >Like Genre</v-card-text>
-<<<<<<< HEAD
-            
-=======
             <template v-for="item in recommendList">
               <template v-for="(value,key) in item">
                 {{key}}:{{value}}
@@ -51,7 +48,6 @@
         
             <!-- {{recommendList}} -->
             </template>
->>>>>>> develop
           </v-flex>
         </v-row>
         <v-row>
