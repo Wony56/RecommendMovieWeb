@@ -28,17 +28,15 @@
       ></v-text-field>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndUp">
-      <template>
-        <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="profile">프로필</v-btn>
-      </template>
+
       <template v-if="loggedIn">
-        <v-btn text color="#ff2f6e">회원정보</v-btn>
+        <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="profile">프로필</v-btn>
         <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="logout">로그아웃</v-btn>
       </template>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndDown">
-      <v-btn v-if="loggedIn" fab color="#ff2f6e">
-        <v-icon>mdi-account-circle-outline</v-icon>
+      <v-btn v-if="loggedIn" text fab @click="profile">
+        <v-icon  color="#ff2f6e">mdi-account-circle-outline</v-icon>
       </v-btn>
       <v-btn v-if="loggedIn" text color="#ff2f6e" fab @click="logout">
         <v-icon>mdi-logout-variant</v-icon>

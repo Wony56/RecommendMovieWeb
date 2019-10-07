@@ -4,7 +4,7 @@
             <div class="text-center justify-center headline"> 선호하는 영화를 선택 해주세요 </div>
             <br>
             <div class="text-right">
-                <v-btn outlined style="margin-right:10px" color="#ff2f6e">건너뛰기</v-btn>
+                <v-btn outlined style="margin-right:10px" color="#ff2f6e" @click="gotomain">건너뛰기</v-btn>
                 <v-btn v-if="select==100" outlined color="#ff2f6e">구독하기</v-btn>
             </div>
             <br>
@@ -106,6 +106,11 @@ export default {
     }),
     components:{
         SubScribeCard
+    },
+    methods: {
+        gotomain() {
+      this.$router.push('home');
+    }
     },
 }
 </script>

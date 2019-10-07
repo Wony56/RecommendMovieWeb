@@ -41,6 +41,7 @@
               style="background-color:#ff2f6e; color:#fff;"
               class="text-center py-1"
             >Like Genre</v-card-text>
+            
           </v-flex>
         </v-row>
         <v-row>
