@@ -41,19 +41,22 @@
               style="background-color:#ff2f6e; color:#fff;"
               class="text-center py-1"
             >Like Genre</v-card-text>
-            <template v-for="item in recommendList">
-              <template v-for="(value,key) in item">
-                {{key}}:{{value}}
-              </template>
-        
-            <!-- {{recommendList}} -->
-            </template>
           </v-flex>
         </v-row>
-        <v-row>
-          <v-flex xs12>
-            <v-card flat height="180"></v-card>
-          </v-flex>
+        <v-row class="justify-center text-center">
+            <v-flex mx-4 my-1 xs2 v-for="(item,index) in recommendations" :key=index flat height="180">
+              <MovieCard 
+              :id='recommendations[index].id' 
+              :title='recommendations[index].title' 
+              :genres_array='recommendations[index].genres_array' 
+              :viewCnt='recommendations[index].view_cnt' 
+              :timeStamp='recommendations[index].timeStamp' 
+              :year='recommendations[index].year' 
+              :overview='recommendations[index].overview' 
+              :rating='recommendations[index].rrating' 
+              :img='recommendations[index].poster_path'
+              />
+            </v-flex>
         </v-row>
         <v-row>
           <v-flex xs12>
@@ -63,9 +66,9 @@
             >Movie</v-card-text>
           </v-flex>
         </v-row>
-        <v-row>
-          <v-flex xs12>
-            <v-card flat height="180"></v-card>
+        <v-row class="justify-center text-center">
+          <v-flex>
+              <MovieSeen :movieListCards="watchList" />
           </v-flex>
         </v-row>
       </v-col>
@@ -76,18 +79,26 @@
 <script>
 import api from "../../../api";
 import { mapState } from "vuex";
-import MovieListCard from "../../MovieListCard";
+import MovieCard from "../../base/card/MovieCard.vue";
+import MovieSeen from "../../MovieSeen.vue";
 
 export default {
-  computed: {
-    ...mapState({
-      user: state => state.auth.userInfo
-    }),
-    date() {
+  components: {
+    MovieCard,
+    MovieSeen
+  },
+  data() {
       return {
         watchList: [],
         recommendList:[],
       };
+  },
+  computed: {
+    ...mapState({
+      user: state => state.auth.userInfo
+    }),
+    recommendations: function() {
+      return this.recommendList;
     },
     subscribeInfo: function() {
       if (this.user.is_subscribe) {
@@ -125,24 +136,26 @@ export default {
     .then(res=> {
       console.log(res.data)
       if(res.status === 200){
+        this.$forceUpdate();
         return res.data;
       }
     })
     .catch(err=>{
       alert(err)
     })
-    // KNN
-    this.recommendList = await api
-    .recommendKNN(params)
-    .then(res=> {
-      console.log(res.data)
-      if(res.status === 200){
-        return res.data;
-      }
-    })
-    .catch(err=>{
-      alert(err)
-    })
+    // // KNN 지우지마세요 사용할거에요
+    // this.recommendList = await api
+    // .recommendKNN(params)
+    // .then(res=> {
+    //   console.log(res.data)
+    //   if(res.status === 200){
+    //     this.$forceUpdate();
+    //     return res.data;
+    //   }
+    // })
+    // .catch(err=>{
+    //   alert(err)
+    // })
   },
   methods: {
     subscibe() {

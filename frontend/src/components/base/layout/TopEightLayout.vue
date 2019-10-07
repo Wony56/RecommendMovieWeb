@@ -14,8 +14,7 @@
   <MovieCard :id='recommends[5].id' :title='recommends[5].title' :genres_array='recommends[5].genres_array' :viewCnt='recommends[5].view_cnt' :timeStamp='recommends[5].timeStamp' :year='recommends[5].year' :overview='recommends[5].overview' :rating='recommends[5].average_rating' :img='recommends[5].poster_path'/>
   <MovieCard :id='recommends[6].id' :title='recommends[6].title' :genres_array='recommends[6].genres_array' :viewCnt='recommends[6].view_cnt' :timeStamp='recommends[6].timeStamp' :year='recommends[6].year' :overview='recommends[6].overview' :rating='recommends[6].average_rating' :img='recommends[6].poster_path'/>
   <MovieCard :id='recommends[7].id' :title='recommends[7].title' :genres_array='recommends[7].genres_array' :viewCnt='recommends[7].view_cnt' :timeStamp='recommends[7].timeStamp' :year='recommends[7].year' :overview='recommends[7].overview' :rating='recommends[7].average_rating' :img='recommends[7].poster_path'/>
- 
-
+  {{recommends}}
     
   </carousel>
 </template>
@@ -42,15 +41,28 @@ export default {
   },
   created(){
     const params = {
-      movieId: this.movieId
+      username: this.user.username
     }
-    api.getSimilarMovie(params).then(res => {
-      console.log(JSON.stringify(res.data))
-      this.recommends = res.data;
-    }).catch(err => {
-      alert(err);
+    // api.getSimilarMovie(params).then(res => {
+    //   console.log(JSON.stringify(res.data))
+    //   this.recommends = res.data;
+    // }).catch(err => {
+    //   alert(err);
+    // })
+    // SVD
+    this.recommends = api
+    .recommendSVD(params)
+    .then(res=> {
+      console.log(res.data)
+      if(res.status === 200){
+        this.$forceUpdate();
+        return res.data;
+      }
     })
-    
+    .catch(err=>{
+      alert(err)
+    })
+ 
   }
 };
 </script>

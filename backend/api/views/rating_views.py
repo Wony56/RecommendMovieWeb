@@ -72,11 +72,9 @@ def svd(request):
         ratings = Rating.objects.all()
 
         ratings_df =  pd.DataFrame(list(ratings.values('user__username','movie_id','rating')))
-        # print(ratings_df)
-        
+
         R_df = ratings_df.pivot(index='user__username',columns='movie_id',values='rating').fillna(0)
-        # print(R_df)
-        
+
         # dataframe을 matrix화
         R = R_df.values
         # 해당 영화의 평점의 평균
@@ -93,19 +91,13 @@ def svd(request):
         all_user_predicted_ratings = np.dot(np.dot(U,sigma),vt)+user_ratings_mean.reshape(-1,1)
 
         preds_df = pd.DataFrame(all_user_predicted_ratings,index=R_df.index,columns=R_df.columns)
-        print(preds_df)
-       
+
         already_rated, predictions = recommend_movies(preds_df,userid,ratings_df,10)
-        print(already_rated)
-        print(predictions)
 
         r_movies = predictions['movie_id'].tolist()
-        print(r_movies)
 
-        movies =[]
-        for r_movie in r_movies:
-            movies += [Movie.objects.get(id = r_movie)]
-        # movies = Movie.objects.filter(id__in= r_movies)
+        movies = Movie.objects.filter(id__in = r_movies)
+
         serializer = MovieSerializer(movies, many=True)
         data = serializer.data
         return Response(data = data,status=status.HTTP_200_OK)
@@ -116,17 +108,16 @@ def recommend_movies(predictions_df,userid,original_ratings_df,num_recommendatio
     movies = Movie.objects.all()
     movies_df =  pd.DataFrame(list(movies.values('id','title','genres')))
     movies_df.rename({'id':'movie_id'},axis=1,inplace=True)
-    print(movies_df)
+
 #     예측값으로 추천해줄 영화 정렬
     sorted_user_predictions = predictions_df.loc[userid].sort_values(ascending=False)
-    print(sorted_user_predictions)
 
 #     원본 movie_df
     user_data = original_ratings_df[original_ratings_df.user__username == userid]
-    print(user_data)
+
 #   해당 유저의 평점순으로 movie_df join 정렬(이미본거)
     user_full = (user_data.merge(movies_df,how='left',left_on='movie_id',right_on='movie_id').sort_values(['rating'],ascending=False))
-    print(user_full)
+
 # 안본 영화중에 추천
     recommendations = (movies_df[~movies_df['movie_id'].isin(user_full['movie_id'])].
                       merge(pd.DataFrame(sorted_user_predictions).reset_index(),how='left',
@@ -136,5 +127,5 @@ def recommend_movies(predictions_df,userid,original_ratings_df,num_recommendatio
                        sort_values('predictions',ascending=False).
                        iloc[:num_recommendations]
                       )
-    print(recommendations)
+
     return user_full, recommendations

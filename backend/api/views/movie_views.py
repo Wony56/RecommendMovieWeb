@@ -232,16 +232,17 @@ def edit_movie(request):
 def movie_by_user(request):
     if request.method == 'GET':
         username = request.GET.get('username', None)
-            
+        
         try:
             user = User.objects.get(username=username)
-            watchList = Rating.objects.get(user=user)
-
+      
+            watchList = Rating.objects.filter(user=user)
+         
             query = Q()
             for element in watchList:
                 query = query | Q(id=element.movie.id)
-            movies = movie.filter(query)
-
+            
+            movies = Movie.objects.filter(query)
             serializer = MovieSerializer(movies, many=True)
             data = serializer.data
 

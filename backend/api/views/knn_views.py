@@ -8,11 +8,14 @@ from django.contrib.auth.models import User
 @api_view(['GET'])
 def get_knn_age_view(request):
     if request.method =='GET':
-        age = request.GET.get('age', None)
+        # age = request.GET.get('age', None)
         userid = request.GET.get('username',None)
-        print(age)
+        # print(age)
         print(userid)
         # age = params.data.get('age',None)
+        user = User.objects.get(username = userid)
+        profile = Profile.objects.get(user=user)
+        age = profile.age
 
         obj = KnnAgeView.objects.get(Age=int(age))
         genre = obj.Max_genre
@@ -35,6 +38,7 @@ def get_knn_age_view(request):
         data = serializer.data
         
         return Response(data=data, status=status.HTTP_200_OK)
+        # return Response(status = status.HTTP_200_OK)
 
 @api_view(['GET'])
 def update_knn_age_view(request):
