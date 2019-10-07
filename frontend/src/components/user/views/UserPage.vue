@@ -41,7 +41,17 @@
               style="background-color:#ff2f6e; color:#fff;"
               class="text-center py-1"
             >Like Genre</v-card-text>
+<<<<<<< HEAD
             
+=======
+            <template v-for="item in recommendList">
+              <template v-for="(value,key) in item">
+                {{key}}:{{value}}
+              </template>
+        
+            <!-- {{recommendList}} -->
+            </template>
+>>>>>>> develop
           </v-flex>
         </v-row>
         <v-row>
@@ -79,7 +89,8 @@ export default {
     }),
     date() {
       return {
-        watchList: []
+        watchList: [],
+        recommendList:[],
       };
     },
     subscribeInfo: function() {
@@ -112,6 +123,30 @@ export default {
       .catch(err => {
         alert(err);
       });
+    // SVD
+    this.recommendList = await api
+    .recommendSVD(params)
+    .then(res=> {
+      console.log(res.data)
+      if(res.status === 200){
+        return res.data;
+      }
+    })
+    .catch(err=>{
+      alert(err)
+    })
+    // KNN
+    this.recommendList = await api
+    .recommendKNN(params)
+    .then(res=> {
+      console.log(res.data)
+      if(res.status === 200){
+        return res.data;
+      }
+    })
+    .catch(err=>{
+      alert(err)
+    })
   },
   methods: {
     subscibe() {
