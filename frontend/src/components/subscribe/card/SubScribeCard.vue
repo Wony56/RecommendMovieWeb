@@ -9,7 +9,6 @@
             color="#ff2f6e"
             background-color="lightgray"
             half-increments
-            @click="registerRating"
           ></v-rating>
         </div>
       </v-container>
@@ -26,7 +25,6 @@
             color="yellow darken-3"
             background-color="grey darken-1"
             half-increments
-            @click="registerRating"
           ></v-rating>
         </div>
       </v-container>
@@ -43,9 +41,16 @@ export default {
     title: String,
     url: String
   },
-  data: () => ({
-    rating: 0
-  }),
+  data() {
+    return {
+      rating: 0
+    };
+  },
+  watch: {
+    rating: function(newVal, oldVal) {
+      this.registerRating();
+    }
+  },
   methods: {
     registerRating() {
       this.$store.state.rating.count++;
@@ -54,8 +59,7 @@ export default {
         id: this.id,
         rating: this.rating
       };
-
-      api
+      await api
         .registerRating(params)
         .then(res => {
           if (res.status === 201) {

@@ -85,7 +85,7 @@ class Movie(models.Model):
 class Rating(models.Model):
     user = models.ForeignKey(User, on_delete = models.CASCADE)
     movie = models.ForeignKey(Movie, on_delete = models.CASCADE)
-    rating = models.IntegerField()
+    rating = models.FloatField()
     timeStamp = models.DateTimeField()
 
 
