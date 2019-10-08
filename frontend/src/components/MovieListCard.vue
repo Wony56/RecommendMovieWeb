@@ -97,7 +97,7 @@
                 </v-flex> -->
                 </div>
                 <div>
-                  <!-- <TopEight :movieId='id'/> -->
+                  <TopEight :movieId='id'/>
                 </div>
               </v-flex>
             </v-row>
@@ -196,7 +196,7 @@
                   </v-card>
                 </div> -->
                 <div>
-                  <!-- <TopEight/> -->
+                  <TopEight/>
                 </div>
               </v-flex>
             </v-row>

@@ -30,21 +30,25 @@ def get_usergroup(request):
 def get_moviegroup(request):
     if request.method=='GET':
         movie_id = request.GET.get('movieId', None)
+    
         movie = Movie.objects.get(id=movie_id)
         moviegroup = movieCluster.objects.get(movie=movie)
         groupnum = moviegroup.group
 
         moviegroups = movieCluster.objects.all()
-        moviegroups = moviegroups.filter(group = groupnum)
-        if moviegroups.count()>8:
-            moviegroups=moviegroups[:8]
+        moviegroups = moviegroups.exclude(id=movie_id).filter(group = groupnum)
+        # if moviegroups.count()>8:
+        #     moviegroups=moviegroups[:8]
         
         movies = Movie.objects.all()
-
+        
         query = Q()
         for moviegroup in moviegroups:
             query = query | Q(id=moviegroup.id)
         movies = movies.filter(query)
+        movies.exclude(id=movie_id)
+        if movies.count() > 8 :
+            movies=movies[:8]
 
         serializer = MovieSerializer(movies, many=True)
         data = serializer.data
