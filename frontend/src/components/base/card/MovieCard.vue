@@ -14,7 +14,7 @@
                 style="font-size:10px; text-align:center; margin-top:50px;"
                 class="text-xs-center justify-center"
               >{{title}}</div>
-              <div style="text-align:center padding-top:10px">
+              <div class="justify-center text-center" style="text-align:center padding-top:10px">
                 <v-rating
                   small
                   :value="rating"
