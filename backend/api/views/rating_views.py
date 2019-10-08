@@ -1,6 +1,6 @@
 from rest_framework import status
 from rest_framework.decorators import api_view
-from api.models import Rating, Movie 
+from api.models import Rating, Movie ,Profile
 from django.contrib.auth.models import User
 
 # from api.serializers import MovieSerializer
@@ -69,12 +69,30 @@ def svd(request):
     if request.method =='GET':
         userid = request.GET.get('username',None)
         
-        ratings = Rating.objects.all()
+        profiles = Profile.objects.all()
+        list_ = []
+        for profile in profiles:
+            user = profile.user.username
+            # print("############################")
+            # print(type(user))
+            # print(user)
+            seemovies = profile.seenmovie
+           
+            if seemovies == '':
+                list_.append({'username':user,'movie_id':1,'rating':0})
+                continue
 
-        ratings_df =  pd.DataFrame(list(ratings.values('user__username','movie_id','rating')))
+            seemovies = profile.seenmovie.split('|')
+  
+            for seemovie in seemovies:
+                [movieid,rating] = seemovie.split('{')
+                list_.append({'username':user,'movie_id':int(movieid),'rating':int(rating)})
 
-        R_df = ratings_df.pivot(index='user__username',columns='movie_id',values='rating').fillna(0)
+        ratings_df = pd.DataFrame(list_)
+        R_df = ratings_df.pivot(index='username',columns='movie_id',values='rating').fillna(0)
 
+        # R_df = ratings_df.pivot(index='user__username',columns='movie_id',values='rating').fillna(0)
+        
         # dataframe을 matrix화
         R = R_df.values
         # 해당 영화의 평점의 평균
@@ -82,18 +100,18 @@ def svd(request):
 
         # normalization
         R_demeaned = R - user_ratings_mean.reshape(-1,1)
-
+      
         # svd
         U,sigma,vt = svds(R_demeaned,k=50)
         sigma = np.diag(sigma)
-
+        
         # cost function(평점 R과 근사한 평점의 차를 구하는 RMSE      + 일반화된 솔루션을 위한 규제항)
         all_user_predicted_ratings = np.dot(np.dot(U,sigma),vt)+user_ratings_mean.reshape(-1,1)
-
+        
         preds_df = pd.DataFrame(all_user_predicted_ratings,index=R_df.index,columns=R_df.columns)
-
+        # print(preds_df)
         already_rated, predictions = recommend_movies(preds_df,userid,ratings_df,10)
-
+        # print(predictions)
         r_movies = predictions['movie_id'].tolist()
 
         movies = Movie.objects.filter(id__in = r_movies)
@@ -108,13 +126,13 @@ def recommend_movies(predictions_df,userid,original_ratings_df,num_recommendatio
     movies = Movie.objects.all()
     movies_df =  pd.DataFrame(list(movies.values('id','title','genres')))
     movies_df.rename({'id':'movie_id'},axis=1,inplace=True)
-
 #     예측값으로 추천해줄 영화 정렬
+  
     sorted_user_predictions = predictions_df.loc[userid].sort_values(ascending=False)
-
+ 
 #     원본 movie_df
-    user_data = original_ratings_df[original_ratings_df.user__username == userid]
-
+    user_data = original_ratings_df[original_ratings_df.username == userid]
+   
 #   해당 유저의 평점순으로 movie_df join 정렬(이미본거)
     user_full = (user_data.merge(movies_df,how='left',left_on='movie_id',right_on='movie_id').sort_values(['rating'],ascending=False))
 
