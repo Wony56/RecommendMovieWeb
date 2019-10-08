@@ -79,7 +79,7 @@ export default {
     })
   },
   registerRating(params){
-    return axios.post(`${apiUrl}/movies/registrer-rating/`, {
+    return axios.post(`${apiUrl}/movies/register-rating/`, {
       params
     })
   }

@@ -8,6 +8,7 @@ from django.db.models import Q
 from django.db.models import Count, Case, When, F
 from django.contrib.auth.models import User
 from api.models import Profile
+from django.utils import timezone
 import requests
 
 @api_view(['GET'])
@@ -370,90 +371,107 @@ def register_rating(request):
             movie_id = movie_data.get('id', None)
             rating = movie_data.get('rating', None)
 
+
             if user_by_cookie == user_by_session:
                 username = user_by_session
                 movie = Movie.objects.get(id=movie_id)
                 user = User.objects.get(username=username)
                 profile = Profile.objects.get(user=user)
-                
-                Rating(user=user, movie=movie, rating=rating).save()
 
-                profile.seemovie += "|" + movie.id + "{" + rating
+                rating_by_user = Rating.objects.filter(user=user, movie=movie)
 
-                profile.save()
-
-                movie.rrating = (movie.rrating * movie.rusercount + rating) / (movie.rusercount + 1)
-                movie.rusercount += 1
-                
-                if profile.gender == 'M':
-                    movie.rgender += 1
+                if len(rating_by_user) != 0:
+                    print("Already existed...")
+                    movie.rrating = ((float(movie.rrating) * movie.rusercount - float(rating_by_user[0].rating)) + float(rating)) / movie.rusercount
+                    rating_by_user[0].rating = rating
+                    print(movie.rrating)
+                    
+                    movie.save()
+                    rating_by_user[0].save()
+                    print("Updated...")
                 else:
-                    movie.rgender -= 1
+                    print("First register...")
+                    r = Rating(user=user, movie=movie, rating=rating, timeStamp=timezone.now())
+                    r.save()
+                    
+                    profile.seenmovie = profile.seenmovie + "|" + str(movie.id) + "{" + str(rating)
 
-                if profile.age == 1:
-                    movie.age1count += 1
-                elif profile.age == 18:
-                    movie.age18count += 1
-                elif profile.age == 25:
-                    movie.age25count += 1
-                elif profile.age == 35:
-                    movie.age35count += 1
-                elif profile.age == 45:
-                    movie.age45count += 1
-                elif profile.age == 50:
-                    movie.age50count += 1
-                elif profile.age == 56:
-                    movie.age56count += 1
+                    profile.save()
 
-                if profile.occupation == "academic/educator":
-                    movie.academiceducatorcount += 1
-                elif profile.occupation == "artist":
-                    movie.artistcount += 1
-                elif profile.occupation == "clerical/admin":
-                    movie.clericaladmincount += 1
-                elif profile.occupation == "college/grad student":
-                    movie.collegegradstudentcount += 1
-                elif profile.occupation == "customer service":
-                    movie.customerservicecount += 1
-                elif profile.occupation == "doctor/health care":
-                    movie.doctorhealthcarecount += 1
-                elif profile.occupation == "executive/managerial":
-                    movie.executivemanagerialcount += 1
-                elif profile.occupation == "farmer":
-                    movie.farmercount += 1
-                elif profile.occupation == "homemaker":
-                    movie.homemakercount += 1
-                elif profile.occupation == "K-12 student":
-                    movie.K12studentcount += 1
-                elif profile.occupation == "lawyer":
-                    movie.lawyercount += 1
-                elif profile.occupation == "programmer":
-                    movie.programmercount += 1
-                elif profile.occupation == "retired":
-                    movie.retiredcount += 1
-                elif profile.occupation == "sales/marketing":
-                    movie.salesmarketingcount += 1
-                elif profile.occupation == "scientist":
-                    movie.scientistcount += 1
-                elif profile.occupation == "self-employed":
-                    movie.selfemployedcount += 1
-                elif profile.occupation == "technician/engineer":
-                    movie.technicianengineercount += 1
-                elif profile.occupation == "tradesman/craftsman":
-                    movie.tradesmancraftsmancount += 1
-                elif profile.occupation == "unemployed":
-                    movie.unemployedcount += 1
-                elif profile.occupation == "writer":
-                    movie.writercount += 1
-                else:
-                    movie.othercount += 1
-                
-                movie.save()
+                    movie.rrating = (float(movie.rrating) * movie.rusercount + float(rating)) / (movie.rusercount + 1)
+                    movie.rusercount += 1
+                    
+                    if profile.gender == 'M':
+                        movie.rgender += 1
+                    else:
+                        movie.rgender -= 1
+
+                    if profile.age == 1:
+                        movie.age1count += 1
+                    elif profile.age == 18:
+                        movie.age18count += 1
+                    elif profile.age == 25:
+                        movie.age25count += 1
+                    elif profile.age == 35:
+                        movie.age35count += 1
+                    elif profile.age == 45:
+                        movie.age45count += 1
+                    elif profile.age == 50:
+                        movie.age50count += 1
+                    elif profile.age == 56:
+                        movie.age56count += 1
+
+                    if profile.occupation == "academic/educator":
+                        movie.academiceducatorcount += 1
+                    elif profile.occupation == "artist":
+                        movie.artistcount += 1
+                    elif profile.occupation == "clerical/admin":
+                        movie.clericaladmincount += 1
+                    elif profile.occupation == "college/grad student":
+                        movie.collegegradstudentcount += 1
+                    elif profile.occupation == "customer service":
+                        movie.customerservicecount += 1
+                    elif profile.occupation == "doctor/health care":
+                        movie.doctorhealthcarecount += 1
+                    elif profile.occupation == "executive/managerial":
+                        movie.executivemanagerialcount += 1
+                    elif profile.occupation == "farmer":
+                        movie.farmercount += 1
+                    elif profile.occupation == "homemaker":
+                        movie.homemakercount += 1
+                    elif profile.occupation == "K-12 student":
+                        movie.K12studentcount += 1
+                    elif profile.occupation == "lawyer":
+                        movie.lawyercount += 1
+                    elif profile.occupation == "programmer":
+                        movie.programmercount += 1
+                    elif profile.occupation == "retired":
+                        movie.retiredcount += 1
+                    elif profile.occupation == "sales/marketing":
+                        movie.salesmarketingcount += 1
+                    elif profile.occupation == "scientist":
+                        movie.scientistcount += 1
+                    elif profile.occupation == "self-employed":
+                        movie.selfemployedcount += 1
+                    elif profile.occupation == "technician/engineer":
+                        movie.technicianengineercount += 1
+                    elif profile.occupation == "tradesman/craftsman":
+                        movie.tradesmancraftsmancount += 1
+                    elif profile.occupation == "unemployed":
+                        movie.unemployedcount += 1
+                    elif profile.occupation == "writer":
+                        movie.writercount += 1
+                    else:
+                        movie.othercount += 1
+                    
+                    
+                    movie.save()
+                    print("Registered...")
                 
         except:
             return Response(status = status.HTTP_500_INTERNAL_SERVER_ERROR)
         
-        return Response(stats = status.HTTP_201_CREATED)
+        return Response(status = status.HTTP_201_CREATED)
 
                 
 
