@@ -78,16 +78,18 @@ def svd(request):
             # print(user)
             seemovies = profile.seenmovie
            
-            if seemovies == '':
+            if seemovies == '' or seemovies == None:
                 list_.append({'username':user,'movie_id':1,'rating':0})
                 continue
 
             seemovies = profile.seenmovie.split('|')
-  
+            # print(seemovies)
             for seemovie in seemovies:
-                [movieid,rating] = seemovie.split('{')
-                list_.append({'username':user,'movie_id':int(movieid),'rating':int(rating)})
-
+                try:
+                    [movieid,rating] = seemovie.split('{')
+                    list_.append({'username':user,'movie_id':int(movieid),'rating':float(rating)})
+                except:
+                    print("None예외")
         ratings_df = pd.DataFrame(list_)
         R_df = ratings_df.pivot(index='username',columns='movie_id',values='rating').fillna(0)
 
