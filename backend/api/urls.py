@@ -16,6 +16,7 @@ urlpatterns = [
     url('ratings/$', rating_views.ratings, name='rating_list'),
     url('update_view_cnt/$', movie_views.update_view_cnt, name='update_view_cnt'),
     url('update_rating/$', movie_views.update_rating, name='update_rating'),
+    url('update_seenmovie/$', auth_views.update_seenmovie, name='update_seenmovie'),
     url('auth/detail/$', auth_views.get_profile, name='get_profile'),
     url('users/edit/$', user_views.edit_profile, name='edit_profile'),
     url('users/all/$', user_views.all_profiles, name='all_profiles'),
