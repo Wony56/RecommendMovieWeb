@@ -26,6 +26,7 @@
 
 <script>
 import ImgBanner from "../base/ImgBanner.vue";
+import api from "../../api";
 
 export default {
   components: {
@@ -43,7 +44,27 @@ export default {
   },
   methods: {
     subscribe() {
-      this.$router.push('subscribe');
+      api
+        .subscribe()
+        .then(res => {
+          if (res.status === 200) {
+            alert("구독신청완료!");
+            api
+              .getProfile()
+              .then(res => {
+                if (res.status === 200) {
+                  this.$store.state.auth.userInfo = res.data;
+                  this.sheet = false;
+                }
+              })
+              .catch(err => {
+                alert(err);
+              });
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
     }
   }
 };

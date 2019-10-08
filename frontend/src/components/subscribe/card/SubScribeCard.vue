@@ -54,7 +54,7 @@ export default {
   methods: {
     async registerRating() {
       this.$store.state.rating.count++;
-      console.log("선택된 갯수" + $store.state.rating.count);
+      console.log("선택된 갯수" + this.$store.state.rating.count);
       const params = {
         id: this.id,
         rating: this.rating

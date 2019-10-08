@@ -5,7 +5,12 @@
       <br />
       <div class="text-right">
         <v-btn outlined style="margin-right:10px" color="#ff2f6e" @click="gotomain">건너뛰기</v-btn>
-        <v-btn v-if="this.$store.state.rating.count==10" outlined color="#ff2f6e">구독하기</v-btn>
+        <v-btn
+          v-if="$store.state.rating.count === 10"
+          outlined
+          color="#ff2f6e"
+          @click="subscribe"
+        >구독하기</v-btn>
       </div>
       <br />
       <v-row>
@@ -57,6 +62,28 @@ export default {
   methods: {
     gotomain() {
       this.$router.push("home");
+    },
+    subscribe() {
+      api
+        .subscribe()
+        .then(res => {
+          if (res.status === 200) {
+            alert("구독신청완료!");
+            api
+              .getProfile()
+              .then(res => {
+                if (res.status === 200) {
+                  this.$router.push("/");
+                }
+              })
+              .catch(err => {
+                alert(err);
+              });
+          }
+        })
+        .catch(err => {
+          alert(err);
+        });
     }
   }
 };
