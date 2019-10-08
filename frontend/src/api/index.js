@@ -59,6 +59,28 @@ export default {
   },
   subscribe(){
     return axios.get(`${apiUrl}/auth/subscribe/`);
+  },
+  getProfile(){
+    return axios.get(`${apiUrl}/auth/detail/`);
+  },
+  watchList(params){
+    return axios.get(`${apiUrl}/movies/watch-list/`, {
+      params
+    })
+  },
+  recommendSVD(params){
+    return axios.get(`${apiUrl}/recommend/svd/`,{
+      params,
+    })
+  },
+  recommendKNN(params){
+    return axios.get(`${apiUrl}/recommend/knn_age_view/get/`,{
+      params,
+    })
+  },
+  registerRating(params){
+    return axios.post(`${apiUrl}/movies/register-rating/`, {
+      params
+    })
   }
-
 }

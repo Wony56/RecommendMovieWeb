@@ -61,17 +61,18 @@
                 <div class="mx-7 mx-3" style="color:lightgray">{{ genresStr }}</div>
                 <div class="mx-7 mx-3" style="color:lightgray">{{ year }}</div>
                 <!-- 날짜 -->
-                <div class="mx-7">
+                <div class="mx-7 row">
                   <v-rating
                     large
                     :value="rating"
+                    v-model="ratings"
                     color="#ff2f6e"
                     background-color="white"
                     half-increments
-                    dense
-                    readonly
                     class="justify-center my-2"
+                    row
                   />
+                  <v-btn text style="margin-top:17px" color="#ff2f6e" @click="pushrating(rating)">평점주기</v-btn>
                 </div>
                 <div class="mx-7" style="line-height: 1.3em; color:gray;">{{overview}}</div>
                 <!-- 이위에 영화내용 -->
@@ -96,7 +97,7 @@
                 </v-flex> -->
                 </div>
                 <div>
-                  <!-- <TopEight :movieId='id'/> -->
+                  <TopEight :movieId='id'/>
                 </div>
               </v-flex>
             </v-row>
@@ -140,6 +141,7 @@
                 outlined
                 block
                 @click.stop="dialog = true"
+                @click="godetail(id)"
               >detail</v-btn>
             </v-col>
           </div>
@@ -160,25 +162,28 @@
                 <div class="mx-7 mx-3" style="color:lightgray">{{ genresStr }}</div>
                 <div class="mx-7 mx-3" style="color:lightgray">{{ year }}</div>
                 <!-- 날짜 -->
-                <div class="mx-7">
+                <div class="mx-7 row">
                   <v-rating
                     large
                     :value="rating"
+                    v-model="ratings"
                     color="#ff2f6e"
                     background-color="white"
                     half-increments
-                    dense
-                    readonly
                     class="justify-center my-2"
+                    row
                   />
+                  <v-btn text style="margin-top:17px" color="#ff2f6e" @click="pushrating(rating)">평점주기</v-btn>
                 </div>
                 <div class="mx-7" style="line-height: 1.3em; color:gray;">{{overview}}</div>
                 <!-- 이위에 영화내용 -->
-                <div class="mx-7" style="color:gray;">
-                  <v-icon style="color:gray;">mdi-eye</v-icon>
+                <div class="mx-7" style="color:white;">
+                  조회수 :
                   <span style=" margin-left:10px; color:#ff2f6e">{{ viewCnt }}</span>
-                  <v-icon style="color:gray; margin-left:10px;">mdi-star</v-icon>
-                  <span style=" margin-left:10px; color:#ff2f6e ">{{ rating.toFixed(1) }}</span>
+                  평점 :
+                  <span
+                    style=" margin-left:10px; color:#ff2f6e "
+                  >{{ rating.toFixed(1) }}</span>
                 </div>
                 <!-- <div>
                   <v-card flat>
@@ -191,7 +196,7 @@
                   </v-card>
                 </div> -->
                 <div>
-                  <!-- <TopEight/> -->
+                  <TopEight/>
                 </div>
               </v-flex>
             </v-row>
@@ -203,12 +208,14 @@
 </template>
 
 <script>
+import { mapState, mapActions, mapGetters } from "vuex";
 import axios from "axios";
 import TopEight from "../components/base/layout/TopEightLayout.vue"
 export default {
   data() {
     return {
-      dialog: false
+      dialog: false,
+      ratings: this.rating,
     };
   },
   components: {
@@ -247,9 +254,7 @@ export default {
       type: Number,
       default: 0
     },
-    rating_set:{
-     
-    },
+  
     movieListCards: {
       type: Array,
       default: () => new Array()
@@ -264,9 +269,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions("data", ["searchMovies"]),
     godetail(id) {
       // console.log(this.movieListCards,id,idx)
       this.$emit("update:view-cnt", this.viewCnt+1);
+      
+
       // this.movieListCards[idx]['viewCnt']++ 
       var params = {
         id : this.id
@@ -278,7 +286,51 @@ export default {
           params
         })
         .then(() => {});
-    }
+    },
+    pushrating(rating,rusercount){
+      // this.movieListCards[idx]['viewCnt']++ 
+      
+      var params = {
+        ratings : this.ratings,
+        id : this.id,
+      }
+      // console.log(params)
+      const apiUrl = "/api";
+      axios
+        .get(`${apiUrl}/update_rating/`, {
+          params
+        })
+        .then(() => {});
+      axios
+        .get(`${apiUrl}/update_seenmovie/`, {
+          params
+        })
+        .then(() => {});
+        alert("평점이 등록되었습니다.")
+        // rating = rating * rusercount
+        // alert(rusercount)
+        // rating = rating + this.ratings
+        // rating = rating / (rusercount +1)
+        // rusercount = rusercount + 1
+        // alert(rating)
+        //this.$emit("update:rating", rating);
+        
+        var value = this.$store.state.search
+        if(value == null)
+        {
+          value = ""
+        }
+        const params1 = {
+          title: value
+        };
+
+        this.searchMovies(params1);
+        this.searchMovies(params1);
+        this.ratings =  rating
+        
+    },
+    
+    
   }
 };
 </script>

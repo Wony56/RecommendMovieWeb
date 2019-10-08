@@ -8,6 +8,12 @@ const state = {
 
 // actions
 const actions = {
+  async recommendSVD({commit},params){
+    await api.recommendSVD(params)
+  },
+  async recommendKNN({commit},params){
+    await api.recommendKNN(params)
+  },
   async signup({ commit },params){
     await api.signup(params)
   },
@@ -24,7 +30,7 @@ const actions = {
       overview : d.overview,
       year : d.year,
       count : d.occupationvalue,
-      agecount : d.agevalue
+      agecount : d.agevalue,
 
     }))
 

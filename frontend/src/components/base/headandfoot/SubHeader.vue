@@ -8,9 +8,9 @@
       </v-toolbar-title>
     </v-layout>
     <v-layout justify-start v-if="$vuetify.breakpoint.mdAndDown">
-      <v-btn text color="#ff2f6e">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+     <router-link to="/" style="color:#ff2f6e; text-decoration:none;">
+        <v-icon color="#ff2f6e">mdi-home</v-icon>
+     </router-link>
     </v-layout>
     <v-layout justify-center mx-5>
       <v-text-field
@@ -28,11 +28,16 @@
       ></v-text-field>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndUp">
+
       <template v-if="loggedIn">
+        <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="profile">프로필</v-btn>
         <v-btn text color="#ff2f6e" style="margin-right:15px;" @click="logout">로그아웃</v-btn>
       </template>
     </v-layout>
     <v-layout justify-end v-if="$vuetify.breakpoint.mdAndDown">
+      <v-btn v-if="loggedIn" text fab @click="profile">
+        <v-icon  color="#ff2f6e">mdi-account-circle-outline</v-icon>
+      </v-btn>
       <v-btn v-if="loggedIn" text color="#ff2f6e" fab @click="logout">
         <v-icon>mdi-logout-variant</v-icon>
       </v-btn>
@@ -41,7 +46,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from "vuex";
+import { mapState, mapActions, mapGetters } from "vuex";
 import api from "../../../api";
 
 export default {
@@ -54,12 +59,17 @@ export default {
       select: null
     };
   },
-  computed: mapGetters(["loggedIn"]),
+  computed: {
+    ...mapState({
+      user: state => state.auth.userInfo
+    }),
+    ...mapGetters(["loggedIn"])
+  },
   methods: {
     ...mapActions("data", ["searchMovies"]),
     searchByEnter() {
       this.$router.push("/movies/search");
-
+      this.$store.state.search=this.search;
       const params = {
         title: this.search
       };
@@ -71,10 +81,7 @@ export default {
         .logout()
         .then(res => {
           if (res.status === 200) {
-            alert(
-              this.$store.state.auth.userInfo.username +
-                "님 로그아웃하셨습니다."
-            );
+            alert(this.user.username + "님 로그아웃하셨습니다.");
             this.$cookies.remove("user");
             this.$store.state.auth.userInfo = null;
             this.$router.push("/entrance");
@@ -83,6 +90,9 @@ export default {
         .catch(err => {
           alert(err);
         });
+    },
+    profile() {
+      this.$router.push(`/user/detail/${this.user.username}`);
     }
   }
 };

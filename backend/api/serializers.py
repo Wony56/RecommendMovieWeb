@@ -1,6 +1,7 @@
 from .models import Profile, Movie, Rating
 from rest_framework import serializers
 
+
 class RatingSerializer(serializers.ModelSerializer):
     # movie_name = serializers.SerializerMethodField('get_moivename')
     # user_name = serializers.SerializerMethodField('get_username')
@@ -20,7 +21,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Profile
-        fields = ('id', 'username', 'is_staff', 'gender', 'age', 'occupation','seenmovie')
+        fields = ('id', 'username', 'is_staff', 'gender', 'age', 'occupation','seenmovie', 'is_subscribe', 'subscribe_expire')
 
     def get_username(self, obj):
         return obj.user.username
@@ -41,7 +42,7 @@ class MovieSerializer(serializers.ModelSerializer):
     #rating_set = RatingSerializer(many=True)
     class Meta:
         model = Movie
-        fields = ('id', 'title', 'genres_array','view_cnt','rrating','agevalue','occupationvalue','rgender','year','overview','poster_path',
+        fields = ('id', 'title', 'genres_array','view_cnt','rrating','agevalue','occupationvalue','rgender','year','overview','poster_path'
             )
         # ,'view_cnt','rating'
     def get_viewCnt(self, obj):

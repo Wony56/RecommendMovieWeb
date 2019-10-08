@@ -49,7 +49,7 @@ def create_users():
         if user in rr_data:
             
             #print(rr_data[user]['seenmovie'])
-            seenmovie = str(rr_data[user]['seenmovie'])+ "|" + str(mrequest_data['movies'][movie]['title'])
+            seenmovie = str(rr_data[user]['seenmovie'])+ "|" + str(mrequest_data['movies'][movie]['id'] + "{" + str(rating))
            
             #print(mrequest_data['movies'][movie]['title'])
             #print(seenmovie)
@@ -61,7 +61,7 @@ def create_users():
 
             }
         else :
-            seenmovie = str(mrequest_data['movies'][movie]['title'])
+            seenmovie = str(mrequest_data['movies'][movie]['id']+ "{" + str(rating))
            
             #print(mrequest_data['movies'][movie]['title'])
             #print(seenmovie)
@@ -524,5 +524,5 @@ def create_ratings():
 if __name__ == '__main__':
     num_users = 15
     #create_movies()
-    #create_users()
-    create_ratings()
+    create_users()
+    #create_ratings()

@@ -1,6 +1,6 @@
 <template>
   <v-container>
-    <v-col cols="12">
+    <v-col style="margin-top:80px;" cols="12">
       <v-card>
         <v-card-title>
           사용자 목록

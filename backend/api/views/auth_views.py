@@ -8,6 +8,45 @@ from django.contrib.auth.models import User
 from django.contrib import auth
 from datetime import datetime, timedelta
 
+@api_view(['GET'])
+def update_seenmovie(request) :
+    if request.method == 'GET' :
+        id = request.GET.get('id',None)
+        ratings = request.GET.get('ratings',None)
+        try :
+            user_by_cookie = request.COOKIES.get('user')
+            user_by_session = request.session.get('user', None)
+
+            if user_by_session and user_by_cookie:
+                
+                if user_by_session == user_by_cookie:
+                    
+                    user = User.objects.get(username=user_by_session)
+                    profile = Profile.objects.get(user=user)
+
+            temp = profile.seenmovie.split("|")
+            x = ""
+            cou = 0
+            for value in temp:
+                temp1 = value.split("{")
+                
+                if temp1[0] != id:
+                    if(cou != 0):
+                         x =x+"|"+temp1[0]+"{"+temp1[1] 
+
+                    else:
+                         x =x+temp1[0]+"{"+temp1[1] 
+                         cou +=1
+                    
+            profile.seenmovie = x + "|" +  id +  "{" +  ratings
+            
+            profile.save()
+            return Response(status=status.HTTP_200_OK)
+        except :
+            return Response(status=status.HTTP_200_OK)
+
+
+
 @api_view(['POST'])
 def signup(request):
 
@@ -102,18 +141,21 @@ def signup_many(request):
 
 @api_view(['GET'])
 def get_profile(request) :
+    if request.method == 'GET':
+        try:
+            user_by_cookie = request.COOKIES.get('user')
+            user_by_session = request.session.get('user', None)
 
-    if request.method == 'GET' :
-        id = request.GET.get('id',None)
-        user = User.objects.get(username='user'+id)
-        profile = Profile.objects.get(user=user)
-        serializer = ProfileSerializer(profile)
-        data = serializer.data
-        ratings = user.rating_set.all()
-        serializer = RatingSerializer(ratings,many=True)
-        data['ratings'] = serializer.data
+            serializer = None
+            if user_by_session and user_by_cookie:
+                if user_by_session == user_by_cookie:
+                    user = User.objects.get(username=user_by_session)
+                    profile = Profile.objects.get(user=user)
+                    serializer = ProfileSerializer(profile)
+        except:
+            return Response(status=status.HTTP_500_BAD_REQUEST)
         
-        return Response(data=data, status=status.HTTP_201_CREATED)
+        return Response(data=serializer.data, status=status.HTTP_200_OK)
 
 @api_view(['POST'])
 def login(request):
@@ -196,4 +238,25 @@ def user_duplicate(request):
         except User.DoesNotExist:
             return Response(status=status.HTTP_200_OK)
 
+@api_view(['GET'])
+def update_subscribe(request):
+    if request.method == 'GET':
+        try:
+            user_by_cookie = request.COOKIES.get('user')
+            user_by_session = request.session.get('user', None)
+
+            if user_by_session and user_by_cookie:
+                if user_by_session == user_by_cookie:
+                    user = User.objects.get(username=user_by_session)
+                    profile = Profile.objects.get(user=user)
+                    
+                    if profile.is_subscribe == True:
+                        profile.subscribe_expire += timedelta(days=3)
+                    else:
+                        profile.is_subscribe = True;
+                        profile.subscribe_expire = datetime.now() + timedelta(days=3)
+                    profile.save()
+        except:
+            return Response(status=status.HTTP_500_BAD_REQUEST)
         
+        return Response(status=status.HTTP_200_OK)

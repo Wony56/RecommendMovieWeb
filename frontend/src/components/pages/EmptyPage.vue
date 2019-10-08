@@ -44,12 +44,22 @@ export default {
   },
   methods: {
     subscribe() {
-      //구독신청
       api
         .subscribe()
         .then(res => {
           if (res.status === 200) {
-            //구독 성공
+            alert("구독신청완료!");
+            api
+              .getProfile()
+              .then(res => {
+                if (res.status === 200) {
+                  this.$store.state.auth.userInfo = res.data;
+                  this.sheet = false;
+                }
+              })
+              .catch(err => {
+                alert(err);
+              });
           }
         })
         .catch(err => {
