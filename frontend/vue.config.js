@@ -11,10 +11,5 @@ module.exports = {
     }
   },
   outputDir: "./dist/",
-  assetsDir: "static",
-  
-  async fetchPhrases() {
-    const response = await this.$http.get('/api/phrases/')
-    return response.body.data
-  }
+  assetsDir: "static"
 }
