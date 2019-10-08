@@ -6,7 +6,7 @@ import MovieDetailPage from '../components/pages/MovieDetailPage'
 import AdminPage from '../components/pages/AdminPage'
 import UserPage from '../components/user/views/UserPage'
 import EntrancePage from '../components/auth/views/LandingPage'
-import SubScribePage from '../components/subscirbe/views/SubScirbePage'
+import SubScribePage from '../components/subscribe/views/SubScribePage'
 
 import store from '../store'
 

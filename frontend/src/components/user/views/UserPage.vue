@@ -41,6 +41,12 @@
               style="background-color:#ff2f6e; color:#fff;"
               class="text-center py-1"
             >Like Genre</v-card-text>
+<<<<<<< HEAD
+=======
+            <template v-for="item in recommendList">
+              <template v-for="(value,key) in item">{{key}}:{{value}}</template>
+            </template>
+>>>>>>> develop
           </v-flex>
         </v-row>
         <v-row class="justify-center text-center">
@@ -90,7 +96,7 @@ export default {
   data() {
       return {
         watchList: [],
-        recommendList:[],
+        recommendList: []
       };
   },
   computed: {
@@ -132,6 +138,7 @@ export default {
       });
     // SVD
     this.recommendList = await api
+<<<<<<< HEAD
     .recommendSVD(params)
     .then(res=> {
       console.log(res.data)
@@ -156,6 +163,30 @@ export default {
     // .catch(err=>{
     //   alert(err)
     // })
+=======
+      .recommendSVD(params)
+      .then(res => {
+        console.log(res.data);
+        if (res.status === 200) {
+          return res.data;
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+    // KNN
+    this.recommendList = await api
+      .recommendKNN(params)
+      .then(res => {
+        console.log(res.data);
+        if (res.status === 200) {
+          return res.data;
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
+>>>>>>> develop
   },
   methods: {
     subscibe() {
