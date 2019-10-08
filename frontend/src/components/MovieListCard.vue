@@ -97,7 +97,7 @@
                 </v-flex> -->
                 </div>
                 <div>
-                  <!-- <TopEight :movieId='id'/> -->
+                  <TopEight :movieId='id'/>
                 </div>
               </v-flex>
             </v-row>
@@ -196,7 +196,7 @@
                   </v-card>
                 </div> -->
                 <div>
-                  <!-- <TopEight/> -->
+                  <TopEight/>
                 </div>
               </v-flex>
             </v-row>
@@ -292,12 +292,17 @@ export default {
       
       var params = {
         ratings : this.ratings,
-        id : this.id
+        id : this.id,
       }
       // console.log(params)
       const apiUrl = "/api";
       axios
         .get(`${apiUrl}/update_rating/`, {
+          params
+        })
+        .then(() => {});
+      axios
+        .get(`${apiUrl}/update_seenmovie/`, {
           params
         })
         .then(() => {});
@@ -308,23 +313,23 @@ export default {
         // rating = rating / (rusercount +1)
         // rusercount = rusercount + 1
         // alert(rating)
-        // this.$emit("update:rating", rating);
+        //this.$emit("update:rating", rating);
         
         var value = this.$store.state.search
         if(value == null)
         {
           value = ""
         }
-        alert(value)
         const params1 = {
           title: value
         };
 
         this.searchMovies(params1);
         this.searchMovies(params1);
-        this.ratings =  this.rating
+        this.ratings =  rating
         
-    }
+    },
+    
     
   }
 };

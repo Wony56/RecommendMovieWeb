@@ -2,15 +2,12 @@
   <v-card justify-center text-center width="230" outlined style="border-radius:10px;">
     <v-img :src="`${url}`" v-if="(url!=='')&&(url !=='https://image.tmdb.org/t/p/original')">
       <v-container>
-        <v-card-text justify-center text-center>
-          <div class="text-center">{{title}}</div>
-        </v-card-text>
-        <div class="text-center" style="padding-top:80px;">
+        <div class="text-center" style="padding-top:260px;">
           <v-rating
             v-model="rating"
             hover
-            color="yellow darken-3"
-            background-color="grey darken-1"
+            color="#ff2f6e"
+            background-color="lightgray"
             half-increments
           ></v-rating>
         </div>
@@ -55,7 +52,9 @@ export default {
     }
   },
   methods: {
-    async registerRating() {
+    registerRating() {
+      this.$store.state.rating.count++;
+      console.log("선택된 갯수" + $store.state.rating.count);
       const params = {
         id: this.id,
         rating: this.rating

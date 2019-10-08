@@ -5,7 +5,7 @@
       <br />
       <div class="text-right">
         <v-btn outlined style="margin-right:10px" color="#ff2f6e" @click="gotomain">건너뛰기</v-btn>
-        <v-btn v-if="select==100" outlined color="#ff2f6e">구독하기</v-btn>
+        <v-btn v-if="this.$store.state.rating.count==10" outlined color="#ff2f6e">구독하기</v-btn>
       </div>
       <br />
       <v-row>
@@ -15,7 +15,7 @@
       </v-row>
       <v-row class="justify-center my-5 mx-0">
         <template v-for="(movie, key) in movieList">
-          <v-flex xs6 sm3 md2 my-1 :key="key">
+          <v-flex xs6 sm3 md2 my-1 mx-3 :key="key">
             <SubScribeCard :id="movie.id" :title="movie.title" :url="movie.poster_path" />
           </v-flex>
         </template>
@@ -52,7 +52,7 @@ export default {
       return Math.random() - Math.random();
     });
 
-    this.movieList = this.movieList.slice(0, 10);
+    this.movieList = this.movieList.slice(0, 30);
   },
   methods: {
     gotomain() {

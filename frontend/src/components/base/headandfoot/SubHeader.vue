@@ -8,9 +8,9 @@
       </v-toolbar-title>
     </v-layout>
     <v-layout justify-start v-if="$vuetify.breakpoint.mdAndDown">
-      <v-btn text color="#ff2f6e">
-        <v-icon>mdi-menu</v-icon>
-      </v-btn>
+     <router-link to="/" style="color:#ff2f6e; text-decoration:none;">
+        <v-icon color="#ff2f6e">mdi-home</v-icon>
+     </router-link>
     </v-layout>
     <v-layout justify-center mx-5>
       <v-text-field
