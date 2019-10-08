@@ -29,8 +29,6 @@
                 color="#ff2f6e"
                 @click="subscibe"
               >기간 연장</v-btn>
-              <!--<v-btn style="margin-left:10px; margin-top:-5px" text x-small color="#ff2f6e">해지</v-btn>
-              <v-btn style="margin-left:10px; margin-top:-5px" text x-small color="#ff2f6e">구독</v-btn>-->
               <v-btn style="margin-top:15px" outlined color="#ff2f6e" block>회원 정보 수정</v-btn>
             </v-card-text>
           </v-flex>
@@ -40,23 +38,34 @@
             <v-card-text
               style="background-color:#ff2f6e; color:#fff;"
               class="text-center py-1"
-            >Like Genre</v-card-text>
+            >Recommendations</v-card-text>
           </v-flex>
         </v-row>
-        <v-row class="justify-center text-center">
-            <v-flex mx-4 my-1 xs2 v-for="(item,index) in recommendations" :key=index flat height="180">
-              <MovieCard 
-              :id='recommendations[index].id' 
-              :title='recommendations[index].title' 
-              :genres_array='recommendations[index].genres_array' 
-              :viewCnt='recommendations[index].view_cnt' 
-              :timeStamp='recommendations[index].timeStamp' 
-              :year='recommendations[index].year' 
-              :overview='recommendations[index].overview' 
-              :rating='recommendations[index].rrating' 
-              :img='recommendations[index].poster_path'
-              />
-            </v-flex>
+        <v-row class="justify-center text-center" v-if="user.is_subscribe">
+          <v-flex
+            mx-4
+            my-1
+            xs2
+            v-for="(item,index) in recommendations"
+            :key="index"
+            flat
+            height="180"
+          >
+            <MovieCard
+              :id="recommendations[index].id"
+              :title="recommendations[index].title"
+              :genres_array="recommendations[index].genres_array"
+              :viewCnt="recommendations[index].view_cnt"
+              :timeStamp="recommendations[index].timeStamp"
+              :year="recommendations[index].year"
+              :overview="recommendations[index].overview"
+              :rating="recommendations[index].rrating"
+              :img="recommendations[index].poster_path"
+            />
+          </v-flex>
+        </v-row>
+        <v-row class="justify-center text-center" v-else>
+          <v-flex height="180">미구독자에게 제공되지 않는 서비스입니다.</v-flex>
         </v-row>
         <v-row>
           <v-flex xs12>
@@ -68,7 +77,7 @@
         </v-row>
         <v-row class="justify-center text-center">
           <v-flex>
-              <MovieSeen :movieListCards="watchList" />
+            <MovieSeen :movieListCards="watchList" />
           </v-flex>
         </v-row>
       </v-col>
@@ -88,10 +97,10 @@ export default {
     MovieSeen
   },
   data() {
-      return {
-        watchList: [],
-        recommendList: []
-      };
+    return {
+      watchList: [],
+      recommendList: []
+    };
   },
   computed: {
     ...mapState({
@@ -132,17 +141,17 @@ export default {
       });
     // SVD
     this.recommendList = await api
-    .recommendSVD(params)
-    .then(res=> {
-      console.log(res.data)
-      if(res.status === 200){
-        this.$forceUpdate();
-        return res.data;
-      }
-    })
-    .catch(err=>{
-      alert(err)
-    })
+      .recommendSVD(params)
+      .then(res => {
+        console.log(res.data);
+        if (res.status === 200) {
+          this.$forceUpdate();
+          return res.data;
+        }
+      })
+      .catch(err => {
+        alert(err);
+      });
     // // KNN 지우지마세요 사용할거에요
     // this.recommendList = await api
     // .recommendKNN(params)
