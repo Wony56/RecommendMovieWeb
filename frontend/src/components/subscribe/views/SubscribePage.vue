@@ -32,14 +32,22 @@
 <script>
 import SubScribeCard from "../card/SubScribeCard";
 import api from "../../../api";
+import { mapState } from "vuex";
 
 export default {
   data: () => ({
-    select: 80,
     movieList: []
   }),
   components: {
     SubScribeCard
+  },
+  computed: {
+    ...mapState({
+      count: state => state.rating.count
+    }),
+    select() {
+      return this.count * 10;
+    }
   },
   async created() {
     this.movieList = await api
