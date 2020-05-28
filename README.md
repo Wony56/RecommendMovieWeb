@@ -2,9 +2,6 @@
 
 ## SHEEPCHA
 
-### - AWS배포
-http://13.125.243.251:8080/
-
 ### - 주요기능
 1. 로그인 / 회원가입
     - user + "숫자"를 아이디와 비밀번호로 하여 로그인하면 됩니다.
@@ -36,7 +33,7 @@ http://13.125.243.251:8080/
 
     <img src="./image/user_detail.png" width="50%">
 6. 관리자페이지
-    - id: admin / pwd: admin으로 로그인 후 http://13.125.243.251:8080/admin 으로 접속.
+    - id: admin / pwd: admin으로 로그인 후 http://localhost:8080/admin 으로 접속.
     - 사용자 정보와 영화정보를 한눈에 파악할 수 있으며 관리자가 유저정보와 영화정보를 수정 또는 삭제할 수 있습니다.
 
     <img src="./image/admin1.png" width="50%">
